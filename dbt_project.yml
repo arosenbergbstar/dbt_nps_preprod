@@ -1,16 +1,11 @@
-
-# Name your project! Project names should contain only lowercase characters
-# and underscores. A good package name should reflect your organization's
-# name or the intended use of these models
-name: 'dbt_nps'
-version: '1.0.0'
+name: "dbt_nps"
+version: "1.0.0"
+config-version: 2
 
 # This setting configures which "profile" dbt uses for this project.
-profile: 'dbt_nps'
+profile: "dbt_nps"
 
 # These configurations specify where dbt should look for different types of files.
-# The `model-paths` config, for example, states that models in this project can be
-# found in the "models/" directory. You probably won't need to change these!
 model-paths: ["models"]
 analysis-paths: ["analyses"]
 test-paths: ["tests"]
@@ -18,19 +13,67 @@ seed-paths: ["seeds"]
 macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
 
-clean-targets:         # directories to be removed by `dbt clean`
-  - "target"
-  - "dbt_packages"
+target-path: "target" # directory which will store compiled SQL files
+clean-targets: # directories to be removed by `dbt clean`
+    - "target"
+    - "dbt_packages"
 
+flags:
+    send_anonymous_usage_stats: false
+
+data_tests:
+    +severity: warn # all tests
 
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
-
-# In this example config, we tell dbt to build all models in the example/
-# directory as views. These settings can be overridden in the individual model
-# files using the `{{ config(...) }}` macro.
+# These settings can be overridden in individual model files
+# using the `{{ config(...) }}` macro.
 models:
-  dbt_nps:
-    # Config indicated by + and applies to all files under models/example/
-    example:
-      +materialized: view
+    dbt_nps:
+        +dbt-osmosis: "docs/_{model}.yml"
+        +grants:
+            select: ["TRANSFORMER", "TRANSFORMER_DEV", "SVC_METAPLANE_ROLE"]
+        +persist_docs:
+            relation: true
+            columns: true
+        labvantage:
+            +schema: labvantage
+            +materialized: table
+            +tags:
+                - "hourly"
+                - "validated"
+            intermediate:
+                +schema: labvantage_intermediate
+                +materialized: ephemeral
+            staging:
+                +schema: labvantage_stage
+                +materialized: view
+            entities:
+                +schema: labvantage_entity
+                +materialized: table
+            features:
+                +schema: labvantage_feature
+                +materialized: table
+        pipeline:
+            +schema: pipeline
+            +materialized: table
+            +tags:
+                - "hourly"
+            int:
+                +schema: pipeline_int
+                +materialized: ephemeral
+            entities:
+                +schema: pipeline_entity
+                +materialized: table
+            features:
+                +schema: pipeline_features
+                +materialized: table
+        reports:
+            +schema: reports
+            +grants:
+                +select: ["REPORTER"]
+            +materialized: table
+            +tags:
+                - "hourly"
+        export:
+            +database: export

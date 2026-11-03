@@ -41,8 +41,9 @@ models:
           The date when the physician signed the request. It is stored as a
           DATE data type.
         data_type: TIMESTAMP_TZ
-        meta:
-          masking_policy: mp_encrypt_pii_timestamp
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_timestamp
       - name: HAS_PHYSICIAN_SIGNATURE
         description:
           A boolean field indicating whether the request has a physician's
@@ -73,8 +74,9 @@ models:
           The full name of the physician who ordered the request. This is a
           text field.
         data_type: VARCHAR
-        meta:
-          masking_policy: mp_encrypt_pii_string
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_string
       - name: ORDERING_PHYSICIAN_TYPE
         description:
           The type or specialty of the physician who ordered the request.
@@ -86,8 +88,9 @@ models:
           is a VARCHAR type and can contain any string value representing the
           recipient's name or ID.
         data_type: VARCHAR
-        meta:
-          masking_policy: mp_encrypt_pii_string
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_string
       - name: REVIEW_DISPOSITION
         description:
           This column represents the review disposition of the request. It is

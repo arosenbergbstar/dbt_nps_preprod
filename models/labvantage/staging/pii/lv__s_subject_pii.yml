@@ -12,8 +12,9 @@ models:
           The sex of the subject at birth. This is a VARCHAR field and can
           contain values like 'Male', 'Female', etc.
         data_type: VARCHAR
-        meta:
-          masking_policy: mp_encrypt_pii_string
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_string
       - name: HAS_INFORMED_CONSENT
         description:
           A boolean field indicating whether the subject has given informed
@@ -25,15 +26,17 @@ models:
           The timestamp at which the subject was diagnosed with diabetes. The
           data type is DATE.
         data_type: DATE
-        meta:
-          masking_policy: mp_encrypt_pii_date
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_date
       - name: AGE_AT_BLOOD_DRAW
         description:
           The age of the subject at the time of blood draw. The data type is
           NUMBER.
         data_type: NUMBER
-        meta:
-          masking_policy: mp_encrypt_pii_number
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_number
       - name: CLIENT_ID
         description: The unique identifier for the client. The data type is VARCHAR.
         data_type: VARCHAR
@@ -48,47 +51,53 @@ models:
           adult men and women. It is used as a screening tool to identify
           possible weight problems in adults.
         data_type: FLOAT
-        meta:
-          masking_policy: mp_encrypt_pii_number
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_number
       - name: IPMN
         description:
           This column represents the presence or absence of Intraductal
           Papillary Mucinous Neoplasm (IPMN) in the patient. It is a type of
           pancreatic cyst that can lead to pancreatic cancer.
         data_type: BOOLEAN
-        meta:
-          masking_policy: mp_encrypt_pii_bool
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_bool
       - name: SMOKER
         description:
           This column indicates whether the patient is a smoker or not. It is
           a significant risk factor for various diseases, including pancreatic
           cancer.
         data_type: VARCHAR
-        meta:
-          masking_policy: mp_encrypt_pii_string
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_string
       - name: IS_HEAVY_SMOKER
         description:
           A boolean field indicating whether the subject is a heavy smoker.
           True if the subject is a heavy smoker, false otherwise.
         data_type: BOOLEAN
-        meta:
-          masking_policy: mp_encrypt_pii_bool
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_bool
       - name: ETHNICITY
         description:
           This column represents the ethnicity of the patient. It is used for
           demographic analysis and to study the prevalence of diseases among
           different ethnic groups.
         data_type: VARCHAR
-        meta:
-          masking_policy: mp_encrypt_pii_string
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_string
       - name: ETHNICITY_OTHER
         description:
           This column contains additional information about the patient's
           ethnicity if the standard options in the 'ETHNICITY' column do not
           apply. It is a VARCHAR type and can contain any string of text.
         data_type: VARCHAR
-        meta:
-          masking_policy: mp_encrypt_pii_string
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_string
       - name: ICD_10_CODE
         description:
           This column contains the ICD-10 code associated with the patient's
@@ -97,48 +106,54 @@ models:
           symptoms, abnormal findings, and external causes of injuries or
           diseases. It is a VARCHAR type and can contain any string of text.
         data_type: VARCHAR
-        meta:
-          masking_policy: mp_encrypt_pii_string
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_string
       - name: ICD_10_CODE_OTHER
         description:
           This column contains additional ICD-10 codes if the patient has
           more than one diagnosis. It is a VARCHAR type and can contain any
           string of text.
         data_type: VARCHAR
-        meta:
-          masking_policy: mp_encrypt_pii_string
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_string
       - name: HAS_CHRONIC_PANCREATITIS
         description:
           A boolean field indicating whether the subject has been diagnosed
           with chronic pancreatitis. True if the subject has chronic
           pancreatitis, false otherwise.
         data_type: BOOLEAN
-        meta:
-          masking_policy: mp_encrypt_pii_bool
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_bool
       - name: HAS_FAMILY_HISTORY_OF_PANCREATIC_CANCER
         description:
           A boolean field indicating whether the subject has a family history
           of pancreatic cancer. True if there is a family history of pancreatic
           cancer, false otherwise.
         data_type: BOOLEAN
-        meta:
-          masking_policy: mp_encrypt_pii_bool
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_bool
       - name: HAS_RISK_FACTORS
         description:
           A boolean field indicating whether the subject has any known risk
           factors for the condition being tested. True indicates the presence of
           risk factors, while False indicates their absence.
         data_type: BOOLEAN
-        meta:
-          masking_policy: mp_encrypt_pii_bool
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_bool
       - name: KNOWN_GENETIC_RISK_FACTORS
         description:
           This column contains information about any known genetic risk
           factors that the patient may have. The data is stored as a VARCHAR
           type.
         data_type: VARCHAR
-        meta:
-          masking_policy: mp_encrypt_pii_string
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_string
       - name: OTHER_CLINICAL_INFO
         description:
           This column contains any other clinical information that may be
@@ -146,95 +161,109 @@ models:
           physician, additional diagnoses, etc. The data is stored as a VARCHAR
           type.
         data_type: VARCHAR
-        meta:
-          masking_policy: mp_encrypt_pii_string
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_string
       - name: PATIENT_MEDICAL_RECORD_NUMBER
         description: The unique identifier for the patient's medical record.
         data_type: VARCHAR
-        meta:
-          masking_policy: mp_encrypt_pii_string
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_string
       - name: PATIENT_DESCRIPTION
         description: A brief description or note about the patient.
         data_type: VARCHAR
-        meta:
-          masking_policy: mp_encrypt_pii_string
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_string
       - name: PATIENT_FIRST_NAME
         description:
           The first name of the patient. This is a VARCHAR field and can
           contain any alphanumeric characters.
         data_type: VARCHAR
-        meta:
-          masking_policy: mp_encrypt_pii_string
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_string
       - name: PATIENT_MIDDLE_NAME
         description:
           The middle name of the patient. This is a VARCHAR field and can
           contain any alphanumeric characters.
         data_type: VARCHAR
-        meta:
-          masking_policy: mp_encrypt_pii_string
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_string
       - name: PATIENT_LAST_NAME
         description:
           The last name of the patient. This is a VARCHAR field and can
           contain any alphanumeric characters.
         data_type: VARCHAR
-        meta:
-          masking_policy: mp_encrypt_pii_string
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_string
       - name: PATIENT_EMAIL
         description:
           The email address of the patient. This is a VARCHAR field and
           should contain a valid email address.
         data_type: VARCHAR
-        meta:
-          masking_policy: mp_encrypt_pii_string
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_string
       - name: PATIENT_PHONE_NUMBER
         description:
           The phone number of the patient. This is a VARCHAR field and can
           contain any valid phone number format.
         data_type: VARCHAR
-        meta:
-          masking_policy: mp_encrypt_pii_string
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_string
       - name: PATIENT_ADDRESS_STREET
         description:
           The street address of the patient. This is a VARCHAR field and can
           contain any valid street address.
         data_type: VARCHAR
-        meta:
-          masking_policy: mp_encrypt_pii_string
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_string
       - name: PATIENT_ADDRESS_CITY
         description:
           The city of the patient's address. This is a VARCHAR field and can
           contain any valid city name.
         data_type: VARCHAR
-        meta:
-          masking_policy: mp_encrypt_pii_string
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_string
       - name: PATIENT_ADDRESS_STATE
         description:
           The state in which the patient resides. This is a text field and
           can contain any valid state name or abbreviation.
         data_type: VARCHAR
-        meta:
-          masking_policy: mp_encrypt_pii_string
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_string
       - name: PATIENT_ADDRESS_ZIP_CODE
         description:
           The zip code of the patient's address. This is a text field and can
           contain any valid zip code.
         data_type: VARCHAR
-        meta:
-          masking_policy: mp_encrypt_pii_string
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_string
       - name: PATIENT_BIRTH_DATE
         description:
           The birth date of the patient. This is a timestamp field and should
           contain a valid date in the format YYYY-MM-DD.
         data_type: DATE
-        meta:
-          masking_policy: mp_encrypt_pii_date
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_date
       - name: PATIENT_DEATH_DATE
         description:
           The date when the patient passed away. This is represented in the
           DATE format.
         data_type: DATE
-        meta:
-          masking_policy: mp_encrypt_pii_date
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii_date
       - name: SUBJECT_TYPE
         description:
           The type of the subject. This is a VARCHAR field and can contain

@@ -10,8 +10,9 @@ models:
     columns:
       - name: request_id
         data_type: VARCHAR
-        meta:
-          primary_key: true
+        config:
+          meta:
+            primary_key: true
         data_tests:
           - unique
           - not_null

@@ -3,7 +3,7 @@ version: "1.0.0"
 config-version: 2
 
 # This setting configures which "profile" dbt uses for this project.
-profile: "dbt_nps"
+profile: "SNOWFLAKE"
 
 # These configurations specify where dbt should look for different types of files.
 model-paths: ["models"]
@@ -26,9 +26,9 @@ data_tests:
 
 # Migrated from dbt_base: row access policy (NODMED) and PII masking policies used by
 # the labvantage/staging and pipeline/staging models.
-on-run-start:
-    - "{{ create_nodmed_row_access() }}"
-    - "{{ dbt_snow_mask.create_masking_policy('models') }}"
+# on-run-start:
+    # - "{{ create_nodmed_row_access() }}"
+    # - "{{ dbt_snow_mask.create_masking_policy('models') }}"
 
 vars:
     use_force_applying_masking_policy: "True"
@@ -65,18 +65,18 @@ models:
         labvantage:
             +schema: labvantage
             +materialized: table
-            +tags:
-                - "hourly"
-                - "validated"
+            # +tags:
+            #     - "hourly"
+            #     - "validated"
             intermediate:
                 +schema: labvantage_intermediate
                 +materialized: ephemeral
             staging:
-                +schema: labvantage_stage
+                +schema: labvantage_base
                 +materialized: view
-                pii:
-                    +tags:
-                        - "pii"
+                # pii:
+                #     +tags:
+                #         - "pii"
             entities:
                 +schema: labvantage_entity
                 +materialized: table
@@ -89,7 +89,7 @@ models:
             +tags:
                 - "hourly"
             staging:
-                +schema: pipeline_staging
+                +schema: pipeline_base
                 +materialized: view
             int:
                 +schema: pipeline_int
@@ -107,3 +107,5 @@ models:
             +materialized: table
             +tags:
                 - "hourly"
+        # export:
+        #     +database: export

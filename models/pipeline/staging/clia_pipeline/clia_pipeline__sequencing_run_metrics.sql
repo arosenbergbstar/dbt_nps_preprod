@@ -1,19 +1,3 @@
-{% set columns = dbt_utils.get_filtered_columns_in_relation(
-    ref("stg_clia_pipeline__sequencing_run_metrics"), ["HASH_ID"]
-) %}
-
-{#
-    Typing of the JSON-extracted metric columns ('None' -> null), carried over
-    from dbt_prod clia_pipeline_sequencing_run_metrics.
-#}
-{% set float_columns = [
-    "DEMUX_RATE",
-    "DEMUX_BASEPAIR_YIELD_Q30_PCT",
-    "TOTAL_READS_PF_PCT",
-] %}
-{% set number_columns = ["TOTAL_READS", "DEMUX_READS", "TOTAL_READS_PF"] %}
-{% set string_columns = ["SEQUENCING_RUN_ID", "NF_B2F_VERSION"] %}
-
 with
     stg_sequencing_run_metrics as (
         select * from {{ ref("stg_clia_pipeline__sequencing_run_metrics") }}
@@ -21,17 +5,30 @@ with
 
     final as (
         select
-            {% for col in columns %}
-                {% if col | upper in float_columns %}
-                    iff("{{ col }}" = 'None', null, "{{ col }}"::float) as "{{ col }}"
-                {% elif col | upper in number_columns %}
-                    iff("{{ col }}" = 'None', null, "{{ col }}"::number) as "{{ col }}"
-                {% elif col | upper in string_columns %}
-                    iff("{{ col }}" = 'None', null, "{{ col }}"::string) as "{{ col }}"
-                {% else %} "{{ col }}"
-                {% endif %}
-                {% if not loop.last %}, {% endif %}
-            {% endfor %}
+            event,
+            iff(demux_reads = 'None', null, demux_reads::number) as demux_reads,
+            iff(total_reads = 'None', null, total_reads::number) as total_reads,
+            stats,
+            iff(
+                sequencing_run_id = 'None', null, sequencing_run_id::string
+            ) as sequencing_run_id,
+            iff(demux_rate = 'None', null, demux_rate::float) as demux_rate,
+            iff(
+                total_reads_pf = 'None', null, total_reads_pf::number
+            ) as total_reads_pf,
+            iff(
+                total_reads_pf_pct = 'None', null, total_reads_pf_pct::float
+            ) as total_reads_pf_pct,
+            iff(
+                nf_b2f_version = 'None', null, nf_b2f_version::string
+            ) as nf_b2f_version,
+            fastq_manifest,
+            iff(
+                demux_basepair_yield_q30_pct = 'None',
+                null,
+                demux_basepair_yield_q30_pct::float
+            ) as demux_basepair_yield_q30_pct,
+            emitted_at
         from stg_sequencing_run_metrics
         qualify row_number() over (partition by hash_id order by emitted_at asc) = 1
     )

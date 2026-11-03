@@ -1,0 +1,80 @@
+version: 2
+models:
+  - name: array_ids_by_purified_plasma_id__flat
+    description: >
+      Array IDs for each lab operation a purified plasma went through, pivoted wide. One row
+      per purified plasma ID. Anchor: samples (purified_plasma_id). Where a sample appears on
+      more than one array for an operation, the max array ID is kept.
+    columns:
+      - name: purified_plasma_id
+        data_type: VARCHAR
+        data_tests:
+          - unique
+          - not_null
+        description: Purified plasma tube label (samples.purified_plasma_id). Primary key.
+      - name: cfdna_extraction_instrument_id
+        data_type: VARCHAR
+        description: Array ID of the 'cfDNA Extraction Instrument' operation (max if more than one).
+      - name: cfdna_extraction_id
+        data_type: VARCHAR
+        description: Array ID of the 'cfDNA Extraction' operation (max if more than one).
+      - name: cfdna_spectramax_id
+        data_type: VARCHAR
+        description: Array ID of the 'cfDNA Spectramax' operation (max if more than one).
+      - name: cfdna_stock_id
+        data_type: VARCHAR
+        description: Array ID of the 'cfDNA Stock' operation (max if more than one).
+      - name: cfdna_norm_plate_id
+        data_type: VARCHAR
+        description: Array ID of the 'cfDNA Norm Plate' operation (max if more than one).
+      - name: cfdna_norm_id
+        data_type: VARCHAR
+        description: Array ID of the 'cfDNA Norm' operation (max if more than one).
+      - name: library_prep_id
+        data_type: VARCHAR
+        description: Array ID of the 'Library Prep' operation (max if more than one).
+      - name: wgs_library_id
+        data_type: VARCHAR
+        description: Array ID of the 'WGS Library' operation (max if more than one).
+      - name: hmc_label_id
+        data_type: VARCHAR
+        description: Array ID of the '5hmC Label' operation (max if more than one).
+      - name: wgs_stock_id
+        data_type: VARCHAR
+        description: Array ID of the 'WGS Stock' operation (max if more than one).
+      - name: wgs_norm_plate_id
+        data_type: VARCHAR
+        description: Array ID of the 'WGS Norm Plate' operation (max if more than one).
+      - name: wgs_spectramax_id
+        data_type: VARCHAR
+        description: Array ID of the 'WGS Spectramax' operation (max if more than one).
+      - name: wgs_norm_id
+        data_type: VARCHAR
+        description: Array ID of the 'WGS Norm' operation (max if more than one).
+      - name: wgs_pool_id
+        data_type: VARCHAR
+        description: Array ID of the 'WGS Pool' operation (max if more than one).
+      - name: hmc_library_id
+        data_type: VARCHAR
+        description: Array ID of the '5hmC Library' operation (max if more than one).
+      - name: hmc_spectramax_id
+        data_type: VARCHAR
+        description: Array ID of the '5hmC Spectramax' operation (max if more than one).
+      - name: hmc_norm_plate_id
+        data_type: VARCHAR
+        description: Array ID of the '5hmC Norm Plate' operation (max if more than one).
+      - name: hmc_stock_id
+        data_type: VARCHAR
+        description: Array ID of the '5hmC Stock' operation (max if more than one).
+      - name: hmc_norm_id
+        data_type: VARCHAR
+        description: Array ID of the '5hmC Norm' operation (max if more than one).
+      - name: hmc_pool_id
+        data_type: VARCHAR
+        description: Array ID of the '5hmC Pool' operation (max if more than one).
+      - name: wgs_sequencing_id
+        data_type: VARCHAR
+        description: Array ID of the 'WGS Sequencing' operation (max if more than one).
+      - name: hmc_sequencing_id
+        data_type: VARCHAR
+        description: Array ID of the '5hmC Sequencing' operation (max if more than one).

@@ -1,0 +1,28 @@
+version: 2
+models:
+  - name: flow_cell_kits
+    description: >
+      The sequencing kit used for each flow cell.
+    config:
+      materialized: table
+    columns:
+      - name: flow_cell_id
+        data_type: VARCHAR
+        meta:
+          primary_key: true
+        data_tests:
+          - unique
+          - not_null
+        description: Flow cell array ID. Primary key.
+      - name: flow_cell_kit_description
+        data_type: VARCHAR
+        description: Full array method ID for the kit (e.g., 'Flow Cell S2 Kit').
+      - name: flow_cell_kit_id
+        data_type: VARCHAR
+        description: Kit size parsed from the method ID (e.g., 'S2').
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['SP','S1','S2','S4']
+              config:
+                severity: warn

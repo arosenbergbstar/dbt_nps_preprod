@@ -1,0 +1,46 @@
+version: 2
+models:
+  - name: concentration_metrics_by_purified_plasma_id__flat
+    description: >
+      Latest Spectramax concentration values and pass/fail results per purified plasma and
+      test, pivoted wide. One row per purified plasma ID per test. Anchor: samples
+      (purified_plasma_id). Uses the most recent evaluation per sample, spec, and param from
+      concentrations.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - purified_plasma_id
+              - purified_plasma_test_id
+    columns:
+      - name: purified_plasma_id
+        data_type: VARCHAR
+        data_tests:
+          - not_null
+        description: Purified plasma tube label (samples.purified_plasma_id). Part of composite primary key.
+      - name: purified_plasma_test_id
+        data_type: VARCHAR
+        data_tests:
+          - not_null
+        description: Test the concentration spec applies to (from concentrations). Part of composite primary key.
+      - name: cfdna_concentration_value
+        data_type: FLOAT
+        description: cfDNA concentration (ng/uL).
+      - name: is_passing_cfdna_concentration
+        data_type: BOOLEAN
+        description: True if the cfDNA concentration passed its spec. Null if not evaluated.
+      - name: hmc_library_concentration_value
+        data_type: FLOAT
+        description: 5hmC library concentration (ng/uL).
+      - name: is_passing_hmc_library_concentration
+        data_type: BOOLEAN
+        description: True if the 5hmC library concentration passed its spec. Null if not evaluated.
+      - name: wgs_library_concentration_value
+        data_type: FLOAT
+        description: WGS library concentration (ng/uL).
+      - name: is_passing_wgs_library_concentration
+        data_type: BOOLEAN
+        description: True if the WGS library concentration passed its spec. Null if not evaluated.
+      - name: is_passing_lab_qc
+        data_type: BOOLEAN
+        description: True if every latest concentration evaluation for the sample passed, across all specs.

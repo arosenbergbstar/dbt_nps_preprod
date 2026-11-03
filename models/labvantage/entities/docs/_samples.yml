@@ -1,0 +1,83 @@
+version: 2
+models:
+  - name: samples
+    description: >
+      Enriched purified plasma sample records joining the LIMS sample table with its parent
+      sample family (the original blood draw) and the clinical study site. Includes the full
+      sample lifecycle timeline from blood collection through disposal, as well as shipping
+      and storage metadata.
+    config:
+      materialized: table
+      unique_key: sample_id
+    columns:
+      - name: sample_id
+        data_type: VARCHAR
+        meta:
+          primary_key: true
+        data_tests:
+          - unique
+          - not_null
+        description: Unique identifier for the purified plasma sample in the LIMS. Primary key.
+      - name: request_id
+        data_type: VARCHAR
+        description: Test request associated with this sample.
+      - name: purified_plasma_id
+        data_type: VARCHAR
+        description: External tube label/barcode for the purified plasma sample.
+      - name: study_id
+        data_type: VARCHAR
+        description: Clinical study this sample is enrolled in.
+      - name: study_site_description
+        data_type: VARCHAR
+        description: Human-readable name of the clinical site that collected the blood draw.
+      - name: sample_type_id
+        data_type: VARCHAR
+        description: Type of this sample record (e.g., Purified Plasma).
+      - name: source_sample_type_id
+        data_type: VARCHAR
+        description: Type of the parent sample family (e.g., Whole Blood), from the sample family record.
+      - name: prep_type_id
+        data_type: VARCHAR
+        description: Preparation method applied to produce this sample from the source material.
+      - name: specimen_type
+        data_type: VARCHAR
+        description: Biological specimen type (e.g., Plasma, Whole Blood).
+      - name: sample_status
+        data_type: VARCHAR
+        description: Current status of the sample in the lab workflow (e.g., Received, In Process, Disposed).
+      - name: purified_plasma_volume
+        data_type: FLOAT
+        description: Volume of purified plasma available or used (uL).
+      - name: shipper
+        data_type: VARCHAR
+        description: Shipping carrier used to deliver the original blood draw sample.
+      - name: temperature
+        data_type: VARCHAR
+        description: Temperature condition of the sample at time of shipment or receipt.
+      - name: tracking_number
+        data_type: VARCHAR
+        description: Carrier tracking number for the blood draw shipment.
+      - name: source_sample_collection_at
+        data_type: TIMESTAMP_TZ
+        description: Timestamp when the blood draw was collected from the patient at the clinical site.
+      - name: shipped_at
+        data_type: TIMESTAMP_TZ
+        description: Timestamp when the sample was shipped from the collection site to the lab.
+      - name: received_at
+        data_type: TIMESTAMP_TZ
+        description: Timestamp when the sample was received in the lab.
+      - name: confirmed_at
+        data_type: TIMESTAMP_TZ
+        description: Timestamp when receipt was confirmed and logged in the LIMS.
+      - name: disposal_at
+        data_type: TIMESTAMP_TZ
+        description: Timestamp when the sample was disposed of after testing.
+      - name: cancelled_at
+        data_type: TIMESTAMP_TZ
+        description: Timestamp when the sample was cancelled, if applicable.
+      - name: create_at
+        data_type: TIMESTAMP_TZ
+        description: Timestamp when the sample record was created in the LIMS.
+      - name: mod_at
+        data_type: TIMESTAMP_TZ
+        description: Timestamp when the sample record was last modified.

@@ -1,0 +1,35 @@
+version: 2
+models:
+  - name: study_metadata
+    description: >
+      Aggregated study reference data including study type, status, and BioClin deliverable
+      configurations. The bfx_deliverables array is injected as pipeline job input parameters
+      for each study via ext_clinpipe__job_inputs. One row per study.
+    config:
+      materialized: table
+    columns:
+      - name: study_id
+        data_type: VARCHAR
+        meta:
+          primary_key: true
+        data_tests:
+          - unique
+          - not_null
+        description: Unique identifier for the clinical study. Primary key.
+      - name: study_type
+        data_type: VARCHAR
+        description: Classification of the study (e.g., Clinical, Research, Validation).
+      - name: patient_report_type
+        data_type: VARCHAR
+        description: Report template type used for patient-facing reports in this study.
+      - name: study_description
+        data_type: VARCHAR
+        description: Human-readable name or description of the study.
+      - name: study_status
+        data_type: VARCHAR
+        description: Current operational status of the study (e.g., Active, Closed, Suspended).
+      - name: bfx_deliverables
+        data_type: ARRAY
+        description: >
+          Ordered array of BioClin deliverable identifiers for this study (e.g., ["WGS", "5hmC"]).
+          Used by the pipeline job input configuration to specify which analysis outputs to generate.

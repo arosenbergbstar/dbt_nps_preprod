@@ -1,0 +1,48 @@
+version: 2
+models:
+  - name: discrepancies
+    description: >
+      Categorizes sample discrepancies (quality or process failures) recorded in the LIMS into
+      three groups: whole_blood_discrepancy (pre-lab issues with the blood tube),
+      purified_plasma_discrepancy (post-extraction failures or cancellations), or
+      other_discrepancy for all remaining reasons.
+    config:
+      materialized: table
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - sample_id
+              - discrepancy_reason
+    columns:
+      - name: sample_id
+        data_type: VARCHAR
+        data_tests:
+          - not_null
+        description: Unique identifier for the sample with a recorded discrepancy.
+      - name: trf_id
+        data_type: VARCHAR
+        description: Test Requisition Form ID of the associated request.
+      - name: purified_plasma_id
+        data_type: VARCHAR
+        description: Purified plasma tube label for the sample.
+      - name: discrepancy_type
+        data_type: VARCHAR
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['whole_blood_discrepancy', 'purified_plasma_discrepancy', 'other_discrepancy']
+        description: >
+          High-level category of the discrepancy: whole_blood_discrepancy,
+          purified_plasma_discrepancy, or other_discrepancy.
+      - name: discrepancy_reason
+        data_type: VARCHAR
+        data_tests:
+          - not_null
+        description: Detailed reason text describing the specific discrepancy.
+      - name: createdt
+        data_type: TIMESTAMP_TZ
+        description: Timestamp when the discrepancy record was created.
+      - name: moddt
+        data_type: TIMESTAMP_TZ
+        description: Timestamp when the discrepancy record was last modified.

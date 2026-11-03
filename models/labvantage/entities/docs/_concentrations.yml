@@ -1,0 +1,56 @@
+version: 2
+models:
+  - name: concentrations
+    description: >
+      Spectramax concentration spec evaluations from lv__sdidataitemspec, limited to the five
+      concentration specs (Concs_MCD_Test, Concs_LDT_PancV2, Concs Ovarian, Concs_BioClin,
+      Concentrations) with a non-null checked value. One row per data item spec evaluation;
+      re-measurements of the same sample/spec/param produce additional rows (see created_at).
+      Adds purified_plasma_test_id mapped from spec_id.
+    config:
+      materialized: table
+      # the base model needs to add dataset column in order to set a unique key.
+      # the sdidataitemspec table can have multiple copies of a metric for a given sample
+      # we want the most recent dataset only.
+    # Until dataset exists, the model's qualify on (key_id_1, spec_id, param_id) defines the grain;
+    # purified_plasma_test_id is a 1:1 mapping of spec_id.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - key_id_1
+              - purified_plasma_test_id
+              - param_id
+    columns:
+      - name: key_id_1
+        # This column will be renamed to sample ID in the base table in a future phase.
+        data_type: VARCHAR
+        data_tests:
+          - not_null
+        description: The first foreign key. For these specs, the LIMS sample ID (joins to samples.sample_id).
+      - name: checked_value
+        data_type: FLOAT
+        description: Measured concentration value (ng/uL) evaluated against the spec limits.
+      - name: sdc_id
+        data_type: VARCHAR
+        data_tests:
+          - not_null
+        description: System data class (SDC) of the data item (e.g. Sample).
+      - name: condition
+        data_type: VARCHAR
+        description: Result of the spec evaluation ('Pass' or 'Fail').
+      - name: param_id
+        data_type: VARCHAR
+        data_tests:
+          - not_null
+        description: Measured parameter (e.g., cfDNA_conc_ng_ul, HMC_lib_conc_ng_ul, WGS_lib_conc_ng_ul).
+      - name: purified_plasma_test_id
+        data_type: VARCHAR
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['IVD_MCD', 'LDT_PancV2', 'LDT_ovarian', 'bioclin', 'LDT_Panc']
+        description: >
+          Test the concentration spec applies to, mapped from spec_id (IVD_MCD, LDT_PancV2,
+          LDT_ovarian, bioclin, LDT_Panc).

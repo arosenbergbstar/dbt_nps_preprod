@@ -1,0 +1,40 @@
+version: 2
+models:
+  - name: int_reports_with_type
+    description: >
+      One row per request and report subtype (initial, amended, corrected).
+      Classified report events from reports are joined to worksheets on
+      request_id and report_type to pick up the subtype; unclassified reports
+      and worksheets are excluded. Where several report events exist for the
+      same request and subtype, the highest report_event_id is kept.
+      Intended to replace fact_report_approvals, fact_report_results and
+      fact_report_special_types.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - request_id
+            - report_subtype
+    columns:
+      - name: request_id
+        description: "Request the report event is linked to."
+        tests:
+          - not_null
+      - name: report_content
+        description: "Report content from the report event."
+      - name: report_at
+        description: "Timestamp the report event was created."
+      - name: report_subtype
+        description: >
+          Report subtype from worksheets: 'initial', 'amended' or 'corrected'.
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['initial', 'amended', 'corrected']
+      - name: is_qns_reportid
+        description: >
+          True if the report ID is a fast-track QNS report. Renamed from
+          is_fasttrack_qns_reportid for downstream compatibility.
+      - name: report_event_id
+        description: "Report event selected for this request and subtype."
+        tests:
+          - not_null

@@ -1,0 +1,37 @@
+version: 2
+models:
+  - name: instruments
+    description: >
+      Simple mapping of instruments to arrays, derived from array method items. One row per
+      unique array-instrument combination. Used to track which physical instruments were
+      used at each step in the lab workflow.
+    config:
+      materialized: table
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - array_id
+              - instrument_id
+    columns:
+      - name: array_id
+        data_type: VARCHAR
+        data_tests:
+          - not_null
+        description: Unique identifier for the array (plate or flow cell). Part of composite primary key.
+      - name: instrument_id
+        data_type: VARCHAR
+        data_tests:
+          - not_null
+        description: Unique identifier for the instrument used on this array. Part of composite primary key.
+      - name: instrument_type_id
+        data_type: VARCHAR
+        data_tests:
+          - not_null
+        description: Type/category of the instrument (e.g., liquid handler, sequencer, microplate reader).
+      - name: array_method_id
+        data_type: VARCHAR
+        data_tests:
+          - not_null
+        description: Array method (lab step) during which the instrument was used on this array. Part of composite primary key.
+ 

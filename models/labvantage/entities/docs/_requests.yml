@@ -1,0 +1,109 @@
+version: 2
+models:
+  - name: requests
+    description: >
+      Test requests from the lv__s_request_pii source table with workflow status, timestamps for
+      each stage of the turnaround process, shipper information, study and subject associations,
+      and rejection details from the approval step. One row per request. Contains PII.
+    config:
+      materialized: table
+    columns:
+      - name: request_id
+        data_type: VARCHAR
+        meta:
+          primary_key: true
+        data_tests:
+          - unique
+          - not_null
+        description: Unique identifier for the test request. Primary key.
+      - name: trf_id
+        data_type: VARCHAR
+        description: Test Requisition Form ID submitted by the ordering clinical site.
+      - name: subject_id
+        data_type: VARCHAR
+        description: Identifier linking this request to the patient/subject record.
+      - name: study_id
+        data_type: VARCHAR
+        description: Identifier for the clinical study this request is enrolled in.
+      - name: request_status
+        data_type: VARCHAR
+        description: Current workflow status of the request (e.g., Received, In Progress, Released, Cancelled).
+      - name: has_physician_signature
+        data_type: BOOLEAN
+        description: True if the requisition form includes a valid physician signature.
+      - name: has_complete_data
+        data_type: BOOLEAN
+        description: True if all required data fields on the requisition form are present and complete.
+      - name: study_arm
+        data_type: VARCHAR
+        description: The study arm or protocol cohort the subject is assigned to.
+      - name: shipper
+        data_type: VARCHAR
+        description: Name or identifier of the carrier used to ship the sample to the lab.
+      - name: shipper_tracking_number
+        data_type: VARCHAR
+        description: Carrier tracking number for the inbound sample shipment.
+      - name: review_disposition
+        data_type: VARCHAR
+        description: Outcome of the accessioning review (e.g., Accepted, Rejected, On Hold).
+      - name: num_samples_expected
+        data_type: NUMBER
+        description: Number of sample tubes expected based on the test requisition.
+      - name: notes
+        data_type: VARCHAR
+        description: Free-text notes associated with the request.
+      - name: samples_received_at
+        data_type: TIMESTAMP_TZ
+        description: Timestamp when the sample physically arrived and was received in the lab.
+      - name: accessioned_at
+        data_type: TIMESTAMP_TZ
+        description: Timestamp when the sample was formally accessioned into the LIMS.
+      - name: requested_at
+        data_type: TIMESTAMP_TZ
+        description: Timestamp when the test order was placed by the clinical site.
+      - name: accepted_at
+        data_type: TIMESTAMP_TZ
+        description: Timestamp when the sample was accepted for processing after accessioning review.
+      - name: started_at
+        data_type: TIMESTAMP_TZ
+        description: Timestamp when lab processing of the sample began.
+      - name: data_upload_at
+        data_type: TIMESTAMP_TZ
+        description: Timestamp when bioinformatics pipeline results were uploaded to the LIMS.
+      - name: released_at
+        data_type: TIMESTAMP_TZ
+        description: Timestamp when the patient report was released to the ordering site.
+      - name: due_at
+        data_type: TIMESTAMP_TZ
+        description: Target turnaround time deadline for releasing the report.
+      - name: hold_at
+        data_type: TIMESTAMP_TZ
+        description: Timestamp when the request was placed on hold, if applicable.
+      - name: cancelled_at
+        data_type: TIMESTAMP_TZ
+        description: Timestamp when the request was cancelled, if applicable.
+      - name: created_at
+        data_type: TIMESTAMP_TZ
+        description: Timestamp when the request record was first created in the LIMS.
+      - name: modified_at
+        data_type: TIMESTAMP_TZ
+        description: Timestamp when the request record was last modified.
+      - name: work_item_id
+        data_type: VARCHAR
+        description: Semicolon-delimited test (work item) IDs assigned to the request. Defaults to 'LDT_Panc' when null.
+      - name: rejected_at
+        data_type: TIMESTAMP_TZ
+        description: Timestamp the request was rejected (reviewed date of the 'F' approval step), if applicable.
+      - name: approval_tag
+        data_type: VARCHAR
+        # data_tests:
+        #   - accepted_values:
+        #       arguments:
+        #         values: ['F']
+        description: Approval flag of the rejection step. Always 'F' (failed/rejected) when present, null otherwise.
+      - name: rejection_notes
+        data_type: VARCHAR
+        description: Reviewer notes entered on the rejection approval step.
+      - name: reviewed_by
+        data_type: VARCHAR
+        description: User who rejected the request.

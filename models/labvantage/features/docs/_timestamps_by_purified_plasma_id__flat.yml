@@ -1,0 +1,99 @@
+version: 2
+models:
+  - name: timestamps_by_purified_plasma_id__flat
+    description: >
+      Lab milestone timestamps per purified plasma, one column per milestone, truncated to the
+      second. Passthrough of int_timestamps_by_purified_plasma_id. One row per purified plasma
+      ID per request. Anchor: samples (purified_plasma_id). Requests with only whole blood or
+      plasma samples appear once with a null purified_plasma_id.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - purified_plasma_id
+              - request_id
+    columns:
+      - name: purified_plasma_id
+        data_type: VARCHAR
+        description: Purified plasma tube label. Null for requests with only whole blood or plasma samples. Part of composite primary key.
+      - name: request_id
+        data_type: VARCHAR
+        description: LabVantage test request ID. Part of composite primary key.
+      - name: collected_at
+        data_type: TIMESTAMP_TZ
+        description: Earliest source sample collection time (blood draw) for the purified plasma.
+      - name: received_at
+        data_type: TIMESTAMP_TZ
+        description: Earliest time the sample was received in the lab.
+      - name: cfdna_extraction_instrument_at
+        data_type: TIMESTAMP_NTZ
+        description: Earliest creation time of a 'cfDNA Extraction Instrument' array item holding the purified plasma.
+      - name: cfdna_extraction_at
+        data_type: TIMESTAMP_NTZ
+        description: Earliest creation time of a 'cfDNA Extraction' array item holding the purified plasma.
+      - name: cfdna_stock_at
+        data_type: TIMESTAMP_NTZ
+        description: Earliest creation time of a 'cfDNA Stock' array item holding the purified plasma.
+      - name: cfdna_spectramax_at
+        data_type: TIMESTAMP_NTZ
+        description: Earliest creation time of a 'cfDNA Spectramax' array item holding the purified plasma.
+      - name: cfdna_norm_plate_at
+        data_type: TIMESTAMP_NTZ
+        description: Earliest creation time of a 'cfDNA Norm Plate' array item holding the purified plasma.
+      - name: cfdna_norm_at
+        data_type: TIMESTAMP_NTZ
+        description: Earliest creation time of a 'cfDNA Norm' array item holding the purified plasma.
+      - name: library_prep_at
+        data_type: TIMESTAMP_NTZ
+        description: Earliest creation time of a 'Library Prep' array item holding the purified plasma.
+      - name: wgs_library_at
+        data_type: TIMESTAMP_NTZ
+        description: Earliest creation time of a 'WGS Library' array item holding the purified plasma.
+      - name: wgs_stock_at
+        data_type: TIMESTAMP_NTZ
+        description: Earliest creation time of a 'WGS Stock' array item holding the purified plasma.
+      - name: wgs_spectramax_at
+        data_type: TIMESTAMP_NTZ
+        description: Earliest creation time of a 'WGS Spectramax' array item holding the purified plasma.
+      - name: wgs_norm_plate_at
+        data_type: TIMESTAMP_NTZ
+        description: Earliest creation time of a 'WGS Norm Plate' array item holding the purified plasma.
+      - name: wgs_norm_at
+        data_type: TIMESTAMP_NTZ
+        description: Earliest creation time of a 'WGS Norm' array item holding the purified plasma.
+      - name: wgs_pool_at
+        data_type: TIMESTAMP_NTZ
+        description: Earliest creation time of a 'WGS Pool' array item holding the purified plasma.
+      - name: wgs_sequencing_at
+        data_type: TIMESTAMP_NTZ
+        description: Earliest creation time of a 'WGS Sequencing' array item holding the purified plasma.
+      - name: hmc_label_at
+        data_type: TIMESTAMP_NTZ
+        description: Earliest creation time of a '5hmC Label' array item holding the purified plasma.
+      - name: hmc_library_at
+        data_type: TIMESTAMP_NTZ
+        description: Earliest creation time of a '5hmC Library' array item holding the purified plasma.
+      - name: hmc_stock_at
+        data_type: TIMESTAMP_NTZ
+        description: Earliest creation time of a '5hmC Stock' array item holding the purified plasma.
+      - name: hmc_spectramax_at
+        data_type: TIMESTAMP_NTZ
+        description: Earliest creation time of a '5hmC Spectramax' array item holding the purified plasma.
+      - name: hmc_norm_plate_at
+        data_type: TIMESTAMP_NTZ
+        description: Earliest creation time of a '5hmC Norm Plate' array item holding the purified plasma.
+      - name: hmc_norm_at
+        data_type: TIMESTAMP_NTZ
+        description: Earliest creation time of a '5hmC Norm' array item holding the purified plasma.
+      - name: hmc_pool_at
+        data_type: TIMESTAMP_NTZ
+        description: Earliest creation time of a '5hmC Pool' array item holding the purified plasma.
+      - name: hmc_sequencing_at
+        data_type: TIMESTAMP_NTZ
+        description: Earliest creation time of a '5hmC Sequencing' array item holding the purified plasma.
+      - name: flowcell_processing_completed_at
+        data_type: TIMESTAMP_TZ
+        description: Earliest Bluestar_FlowCell_Filter_Task execution for the purified plasma (from tasks).
+      - name: cancelled_at
+        data_type: TIMESTAMP_TZ
+        description: Earliest sample cancellation time.

@@ -1,0 +1,23 @@
+version: 2
+models:
+  - name: well_locations_by_purified_plasma_id__flat
+    description: >
+      Well positions of a purified plasma on key cfDNA arrays. One row per purified plasma ID.
+      Anchor: samples (purified_plasma_id). Where the sample is in more than one well for an
+      operation, the max well is kept.
+    columns:
+      - name: purified_plasma_id
+        data_type: VARCHAR
+        data_tests:
+          - unique
+          - not_null
+        description: Purified plasma tube label (samples.purified_plasma_id). Primary key.
+      - name: well_location_cfdna_extraction_24_well
+        data_type: VARCHAR
+        description: Well position on the 'cfDNA Extraction' (24-well) array.
+      - name: well_location_stock
+        data_type: VARCHAR
+        description: Well position on the 'cfDNA Stock' array.
+      - name: well_location_spectramax
+        data_type: VARCHAR
+        description: Well position on the 'cfDNA Spectramax' array.

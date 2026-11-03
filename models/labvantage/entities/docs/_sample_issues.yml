@@ -1,0 +1,43 @@
+version: 2
+models:
+  - name: sample_issues
+    description: >
+      Request-level lab issues (on hold or rejected) from the approval step audit history, flagged
+      as active when the issue still exists on the current approval step. One row per request
+      per audited approval-step review.
+    config:
+      materialized: table
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - request_id
+              - reviewed_at
+              - issue_type
+    columns:
+      - name: request_id
+        data_type: VARCHAR
+        data_tests:
+          - not_null
+        description: Test request the issue was raised on.
+      - name: reviewed_at
+        data_type: TIMESTAMP_TZ
+        data_tests:
+          - not_null
+        description: Timestamp the approval step was reviewed (issue raised).
+      - name: reviewed_by
+        data_type: VARCHAR
+        description: User who reviewed the approval step.
+      - name: is_active_issue
+        data_type: BOOLEAN
+        description: True if the request still has an on-hold or rejected issue on the current approval step.
+      - name: issue_type
+        data_type: VARCHAR
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['On Hold', 'Rejected']
+        description: >
+          'On Hold' when the approval flag is 'U' with an on-hold note, 'Rejected' when the
+          approval flag is 'F'.

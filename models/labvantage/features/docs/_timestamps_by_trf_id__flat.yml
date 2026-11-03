@@ -1,0 +1,35 @@
+version: 2
+models:
+  - name: timestamps_by_trf_id__flat
+    description: >
+      Request milestone timestamps, one column per milestone, truncated to the second.
+      Passthrough of int_timestamps_by_trf_id. One row per request. Anchor: requests
+      (request_id).
+    columns:
+      - name: trf_id
+        data_type: VARCHAR
+        description: Test Requisition Form ID.
+      - name: request_id
+        data_type: VARCHAR
+        data_tests:
+          - unique
+          - not_null
+        description: LabVantage test request ID. Primary key.
+      - name: accessioned_at
+        data_type: TIMESTAMP_TZ
+        description: Earliest accession time.
+      - name: rejected_at
+        data_type: TIMESTAMP_TZ
+        description: Earliest rejection time.
+      - name: cancelled_at
+        data_type: TIMESTAMP_TZ
+        description: Earliest cancellation time.
+      - name: initial_report_at
+        data_type: TIMESTAMP_TZ
+        description: Earliest initial report event.
+      - name: corrected_report_at
+        data_type: TIMESTAMP_TZ
+        description: Earliest corrected report event.
+      - name: amended_report_at
+        data_type: TIMESTAMP_TZ
+        description: Earliest amended report event.

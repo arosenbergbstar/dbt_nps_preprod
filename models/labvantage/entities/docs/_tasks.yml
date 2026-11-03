@@ -1,0 +1,23 @@
+version: 2
+models:
+  - name: tasks
+    description: >
+      Task execution milestones per sample from taskexecitem. One row per LIMS sample that has
+      any task execution item. Currently only carries the flow cell processing task.
+    config:
+      materialized: table
+    columns:
+      - name: sample_id
+        data_type: VARCHAR
+        meta:
+          primary_key: true
+        data_tests:
+          - unique
+          - not_null
+        description: LIMS sample ID. Primary key.
+      - name: flowcell_processing_completed_at
+        data_type: TIMESTAMP_TZ
+        description: >
+          Earliest creation time of a Bluestar_FlowCell_Filter_Task execution for the sample, i.e.
+          when the flow cell was processed after the pipeline ran and QC metrics were approved.
+          Null if the task has not run.

@@ -1,0 +1,29 @@
+version: 2
+models:
+  - name: timestamps_by_trf_id__tall
+    description: >
+      Request milestone timestamps, unpivoted. One row per request per milestone that has
+      occurred (null timestamps are dropped). Anchor: requests (request_id).
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - request_id
+              - event_name
+    columns:
+      - name: trf_id
+        data_type: VARCHAR
+        description: Test Requisition Form ID.
+      - name: request_id
+        data_type: VARCHAR
+        data_tests:
+          - not_null
+        description: LabVantage test request ID. Part of composite primary key.
+      - name: event_name
+        data_type: VARCHAR
+        data_tests:
+          - not_null
+        description: Milestone name (accessioned, initial_report, corrected_report, amended_report, rejected, cancelled). Part of composite primary key.
+      - name: event_at
+        data_type: TIMESTAMP_TZ
+        description: Timestamp of the milestone, truncated to the second.

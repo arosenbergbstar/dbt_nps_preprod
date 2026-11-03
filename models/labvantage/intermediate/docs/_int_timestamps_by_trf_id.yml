@@ -1,0 +1,31 @@
+version: 2
+models:
+  - name: int_timestamps_by_trf_id
+    description: >
+      One row per TRF ID and request with the earliest request lifecycle
+      timestamps from requests and the earliest report timestamp of each
+      subtype from int_reports_with_type, truncated to the second.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - trf_id
+            - request_id
+    columns:
+      - name: trf_id
+        description: "Test requisition form ID."
+      - name: request_id
+        description: "Request associated with the TRF."
+        tests:
+          - not_null
+      - name: accessioned_at
+        description: "Earliest request accessioned timestamp."
+      - name: rejected_at
+        description: "Earliest request rejected timestamp."
+      - name: cancelled_at
+        description: "Earliest request cancelled timestamp."
+      - name: initial_report_at
+        description: "Earliest initial report timestamp."
+      - name: corrected_report_at
+        description: "Earliest corrected report timestamp."
+      - name: amended_report_at
+        description: "Earliest amended report timestamp."

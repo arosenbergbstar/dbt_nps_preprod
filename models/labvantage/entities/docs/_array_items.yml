@@ -1,0 +1,67 @@
+version: 2
+models:
+  - name: array_items
+    description: >
+      Sample-bearing array items (wells/positions in lab plates and flow cells) with the parent
+      array's layout, type, and the lab operation derived from array type and flow cell
+      chemistry. One row per array item. Excludes test arrays.
+    config:
+      materialized: table
+    data_tests:
+      - dbt_utils.expression_is_true:
+          arguments:
+            # 'Unknown' is the macro's fallthrough for unmapped values. FCID arrays are test flow cells. 
+            # There are some older samples that will fail this. Not worth the effort to troubleshoot, 
+            # so we just track this issue from 2025 onward.
+            expression: "not (operation_name = 'Unknown' and array_id not like 'FCID%' and year(created_at) >= 2025)"
+          config:
+            severity: warn
+    columns:
+      - name: array_id
+        data_type: VARCHAR
+        description: Unique identifier for the parent array (plate or flow cell).
+      - name: array_item_id
+        data_type: VARCHAR
+        meta:
+          primary_key: true
+        data_tests:
+          - unique
+          - not_null
+        description: Unique identifier for the individual array item (well position). Primary key.
+      - name: sample_id
+        data_type: VARCHAR
+        description: Purified plasma sample ID assigned to this array item.
+      - name: operation_name
+        data_type: VARCHAR
+        description: >
+          Lab operation performed at this array item (e.g., cfDNA Extraction, WGS Library Prep,
+          5hmC Library Prep). Derived from the array type and flowcell chemistry classification.
+      - name: array_desc
+        data_type: VARCHAR
+        description: >
+          Description/type of the parent array. All flow cell variants (Flow Cell, Flow Cell
+          Failed, Failed Flow Cell) are normalized to 'Flow Cell'.
+      - name: array_layout_id
+        data_type: VARCHAR
+        description: Layout template identifier for the array (e.g., 96-well plate format).
+      - name: well_location
+        data_type: VARCHAR
+        description: Physical position of the item within the array (e.g., A1, B3).
+      - name: is_control
+        data_type: BOOLEAN
+        description: True if the array item contains a control sample rather than a patient sample.
+      - name: is_failed_array
+        data_type: BOOLEAN
+        description: True if the parent array has been marked as failed.
+      - name: created_by
+        data_type: VARCHAR
+        description: User who created the array item record.
+      - name: mod_by
+        data_type: VARCHAR
+        description: User who last modified the array item record.
+      - name: created_at
+        data_type: TIMESTAMP_NTZ
+        description: Timestamp when the array item record was created.
+      - name: mod_at
+        data_type: TIMESTAMP_NTZ
+        description: Timestamp when the array item record was last modified.

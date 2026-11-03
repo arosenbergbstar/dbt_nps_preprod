@@ -1,0 +1,133 @@
+version: 2
+models:
+  - name: jobs
+    description: >
+      Bioinformatics pipeline jobs from the u_job source table, with associated request/sample IDs,
+      library indexes, volumes, concentrations, pipeline versions, results flags, QC metrics,
+      and sequencer flow cell associations. One row per pipeline job submitted to the CLIA
+      environment.
+    config:
+      materialized: table
+    columns:
+      - name: job_id
+        data_type: VARCHAR
+        meta:
+          primary_key: true
+        data_tests:
+          - unique
+          - not_null
+        description: Unique identifier for the pipeline job. Primary key.
+      - name: trf_id
+        data_type: VARCHAR
+        description: Test Requisition Form ID associated with this job.
+      - name: purified_plasma_id
+        data_type: VARCHAR
+        description: Purified plasma tube label processed in this job.
+      - name: cfdna_id
+        data_type: VARCHAR
+        description: cfDNA sample identifier derived from the purified plasma.
+      - name: purified_plasma_sample_id
+        data_type: VARCHAR
+        description: Internal LIMS sample ID for the purified plasma.
+      - name: hmc_seq_id
+        data_type: VARCHAR
+        description: 5hmC sequencing sample identifier.
+      - name: wgs_seq_id
+        data_type: VARCHAR
+        description: WGS sequencing sample identifier.
+      - name: hmc_flow_cell_id
+        data_type: VARCHAR
+        description: Flow cell ID used for 5hmC sequencing.
+      - name: wgs_flow_cell_id
+        data_type: VARCHAR
+        description: Flow cell ID used for WGS sequencing.
+      - name: purified_plasma_vol
+        data_type: NUMBER
+        description: Volume of purified plasma used in the job (uL).
+      - name: buffer_top_off_vol
+        data_type: NUMBER
+        description: Volume of buffer added to top off the sample to the required input volume.
+      - name: extraction_input_vol
+        data_type: NUMBER
+        description: Input volume for the cfDNA extraction step (uL).
+      - name: extraction_elution_vol
+        data_type: NUMBER
+        description: Elution volume from the cfDNA extraction (uL).
+      - name: cfdna_conc
+        data_type: NUMBER
+        description: Measured cfDNA concentration (ng/uL).
+      - name: input_dna
+        data_type: NUMBER
+        description: Total input DNA mass used for library preparation.
+      - name: wgs_lib_conc
+        data_type: NUMBER
+        description: Measured WGS library concentration after prep.
+      - name: hmc_lib_conc
+        data_type: NUMBER
+        description: Measured 5hmC library concentration after prep.
+      - name: purified_plasma_test
+        data_type: VARCHAR
+        description: Test type assigned to the purified plasma (e.g., WGS, 5hmC, Multicancer).
+      - name: pipeline_name
+        data_type: VARCHAR
+        description: Name of the bioinformatics pipeline used to process this job.
+      - name: pipeline_version
+        data_type: VARCHAR
+        description: Version of the bioinformatics pipeline software.
+      - name: b2f_version
+        data_type: VARCHAR
+        description: BCL-to-FASTQ conversion tool version.
+      - name: nf_b2f_version
+        data_type: VARCHAR
+        description: Nextflow BCL-to-FASTQ pipeline version.
+      - name: clia_env_version
+        data_type: VARCHAR
+        description: CLIA environment version at the time of job execution.
+      - name: has_sample_results_received
+        data_type: BOOLEAN
+        description: True if sample-level pipeline results have been received back into the LIMS.
+      - name: has_hmc_flow_cell_results_received
+        data_type: BOOLEAN
+        description: True if 5hmC flow cell results have been received back into the LIMS.
+      - name: has_wgs_flow_cell_results_received
+        data_type: BOOLEAN
+        description: True if WGS flow cell results have been received back into the LIMS.
+      - name: score
+        data_type: VARCHAR
+        description: Pipeline output score returned by the bioinformatics system.
+      - name: qc_metrics
+        data_type: VARCHAR
+        description: QC metrics returned from the bioinformatics pipeline (JSON or structured text).
+      - name: sample_type
+        data_type: VARCHAR
+        description: Sample type classification for this job.
+      - name: patient_sex_at_birth
+        data_type: VARCHAR
+        description: Patient's biological sex at birth, included for pipeline input.
+      - name: patient_age
+        data_type: NUMBER
+        description: Patient's age at the time of blood collection, included for pipeline input.
+      - name: modified_at
+        data_type: TIMESTAMP_TZ
+        description: Timestamp of the last modification to this record.
+      - name: created_at
+        data_type: TIMESTAMP_TZ
+        description: Timestamp when the job record was created.
+      - name: canceled_at
+        data_type: TIMESTAMP_TZ
+        description: Timestamp when the job was cancelled, if applicable.
+      - name: hmc_index_i5
+        data_type: VARCHAR
+        description: i5 index sequence assigned to the 5hmC library.
+      - name: hmc_index_i7
+        data_type: VARCHAR
+        description: i7 index sequence assigned to the 5hmC library.
+      - name: wgs_index_i5
+        data_type: VARCHAR
+        description: i5 index sequence assigned to the WGS library.
+      - name: wgs_index_i7
+        data_type: VARCHAR
+        description: i7 index sequence assigned to the WGS library.
+      - name: biomarkers
+        data_type: VARCHAR
+        description: Biomarker results returned from the bioinformatics pipeline.

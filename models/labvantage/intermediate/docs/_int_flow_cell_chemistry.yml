@@ -1,0 +1,36 @@
+version: 2
+models:
+  - name: int_flow_cell_chemistry
+    description: >
+      One row per flow cell with its sequencing chemistry (hmc or wgs). Modern
+      flow cells are taken from the HMC and WGS flow cell columns on
+      stg_lv__job. Legacy flow cells that predate the jobs table are derived
+      from the most recent 'Sequencing 96 Well' transfer execution into the
+      flow cell, using the first letter of the source array ('W' = wgs,
+      'C' = hmc).
+    columns:
+      - name: flowcell_id
+        description: >
+          Flow cell identifier. Upper-cased for legacy flow cells; taken as-is
+          from stg_lv__job for modern flow cells.
+        tests:
+          # warn: a flow cell present in both jobs and legacy transfers with
+          # different chemistries, or null flow cell IDs on jobs, would break
+          # the grain. Promote to error once confirmed clean in prod.
+          - not_null:
+              config:
+                severity: warn
+          - unique:
+              config:
+                severity: warn
+      - name: flowcell_process_type
+        description: >
+          Sequencing chemistry of the flow cell: 'hmc' or 'wgs'. 'exception'
+          when a legacy source array prefix is neither 'W' nor 'C'.
+        tests:
+          # warn: 'exception' is an expected, flagged outcome for unrecognized
+          # legacy source arrays. Promote to error if those are resolved.
+          - accepted_values:
+              values: ['hmc', 'wgs']
+              config:
+                severity: warn

@@ -1,0 +1,29 @@
+version: 2
+models:
+  - name: instruments_by_purified_plasma_id__flat
+    description: >
+      Instruments used on a purified plasma, one column per instrument type. One row per
+      purified plasma ID. Anchor: samples (purified_plasma_id). Where more than one instrument
+      of a type was used, the max instrument ID is kept.
+    columns:
+      - name: purified_plasma_id
+        data_type: VARCHAR
+        data_tests:
+          - unique
+          - not_null
+        description: Purified plasma tube label (samples.purified_plasma_id). Primary key.
+      - name: qubit_instrument
+        data_type: VARCHAR
+        description: Qubit instrument ID used on any array holding the purified plasma (max if more than one).
+      - name: microplate_reader_instrument
+        data_type: VARCHAR
+        description: Microplate Reader instrument ID used on any array holding the purified plasma (max if more than one).
+      - name: sequencer_instrument
+        data_type: VARCHAR
+        description: Sequencer instrument ID used on any array holding the purified plasma (max if more than one).
+      - name: liquid_handler_instrument
+        data_type: VARCHAR
+        description: Liquid Handler instrument ID used on any array holding the purified plasma (max if more than one).
+      - name: thermocycler_instrument
+        data_type: VARCHAR
+        description: ThermoCycler instrument ID used on any array holding the purified plasma (max if more than one).

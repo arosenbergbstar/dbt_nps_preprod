@@ -1,0 +1,52 @@
+version: 2
+models:
+  - name: reports
+    description: >
+      Patient report events with non-null report content, linked to their test request. Before
+      LI-892 (2026-07-13) all such events are kept; from LI-892 onward only Export / Complete
+      events (the customer-releasable PDF) are kept. One row per report event per request.
+    config:
+      materialized: table
+    columns:
+      - name: request_id
+        data_type: VARCHAR
+        data_tests:
+          - not_null
+        description: Unique identifier for the test request this report belongs to.
+      - name: report_content
+        data_type: VARCHAR
+        description: Full content/body of the patient report document.
+      - name: report_at
+        data_type: TIMESTAMP_TZ
+        description: Timestamp when the report event was created (i.e., when the report was issued).
+      - name: report_event_id
+        data_type: VARCHAR
+        meta:
+          primary_key: true
+        data_tests:
+          - unique
+          - not_null
+        description: Unique identifier for the report event. Primary key.
+      - name: report_id
+        data_type: VARCHAR
+        description: LabVantage report definition ID (e.g., PatientReport, LDT_PancV2, Multicancer_AM).
+      - name: event_type
+        data_type: VARCHAR
+        description: Report event type. From LI-892 onward only 'Export' events are kept.
+      - name: disposition
+        data_type: VARCHAR
+        description: Report event disposition. From LI-892 onward only 'Complete' events are kept.
+      - name: is_fasttrack_qns_reportid
+        data_type: BOOLEAN
+        description: True if the report ID is PatientReportQNS (fast-track Quantity Not Sufficient report).
+      - name: report_type
+        data_type: VARCHAR
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['initial', 'amended_corrected']
+              config:
+                severity: warn
+        description: > 
+          Report classification derived from report_id ('initial', 'amended_corrected', or 'unclassified'). 
+          Warn on 'unclassified'.

@@ -1,0 +1,81 @@
+version: 2
+models:
+  - name: subjects
+    description: >
+      Comprehensive patient/subject profile combining LIMS subject demographics, clinical
+      history, and all patient ID aliases. Each row represents one unique subject with the
+      clinical attributes used for test eligibility assessment, pipeline input, and patient
+      reporting. Patient IDs from multiple alias types are aggregated into a pipe-delimited list.
+    config:
+      materialized: table
+    columns:
+      - name: subject_id
+        data_type: VARCHAR
+        meta:
+          primary_key: true
+        data_tests:
+          - unique
+          - not_null
+        description: Unique identifier for the patient/subject in the LIMS. Primary key.
+      - name: patient_id_list
+        data_type: VARCHAR
+        description: >
+          Pipe-delimited list of all patient ID aliases (e.g., MRN, site-assigned IDs)
+          associated with this subject, aggregated across alias records.
+      - name: patient_sex_at_birth
+        data_type: VARCHAR
+        description: Patient's biological sex at birth.
+      - name: has_informed_consent
+        data_type: BOOLEAN
+        description: True if the patient has provided documented informed consent for the study.
+      - name: diabetes_diagnosed_date
+        data_type: DATE
+        description: Date the patient was diagnosed with diabetes, if applicable.
+      - name: age_at_blood_draw
+        data_type: NUMBER
+        description: Patient's age at the time of blood collection.
+      - name: modified_at
+        data_type: TIMESTAMP_TZ
+        description: Timestamp when the subject record was last modified.
+      - name: created_at
+        data_type: TIMESTAMP_TZ
+        description: Timestamp when the subject record was created.
+      - name: physician_full_name
+        data_type: VARCHAR
+        description: Full name of the ordering or treating physician.
+      - name: body_mass_index
+        data_type: NUMBER
+        description: Patient's body mass index (BMI) at time of enrollment.
+      - name: smoker
+        data_type: VARCHAR
+        description: Indicates whether the patient is a current or former smoker.
+      - name: patient_ethnicity
+        data_type: VARCHAR
+        description: Patient's self-reported ethnicity.
+      - name: icd_10_code
+        data_type: VARCHAR
+        description: ICD-10 diagnosis code associated with the patient's primary condition.
+      - name: is_heavy_smoker
+        data_type: BOOLEAN
+        description: True if the patient is classified as a heavy smoker (typically >20 pack-years).
+      - name: has_family_history_of_pancreatic_cancer
+        data_type: BOOLEAN
+        description: True if the patient has a first-degree family history of pancreatic cancer.
+      - name: has_family_history_of_ovarian_cancer
+        data_type: VARCHAR
+        description: True if the patient has a family history of ovarian cancer. Currently null; reserved for future use.
+      - name: known_genetic_risk_factors__pancreatic
+        data_type: VARCHAR
+        description: Known genetic variants or hereditary syndromes associated with pancreatic cancer risk.
+      - name: known_genetic_risk_factors
+        data_type: VARCHAR
+        description: General known genetic risk factors. Currently null; reserved for future use.
+      - name: has_risk_factors
+        data_type: BOOLEAN
+        description: True if the patient has any relevant clinical or genetic risk factors flagged in the LIMS.
+      - name: other_clinical_info
+        data_type: VARCHAR
+        description: Free-text field for additional clinical information not captured in structured fields.
+      - name: notes
+        data_type: VARCHAR
+        description: General notes on the subject record entered by lab or clinical staff.

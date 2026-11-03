@@ -1,0 +1,33 @@
+version: 2
+models:
+  - name: purified_plasma_samples_by_purified_plasma_id
+    description: >
+      Purified plasma sample attributes (study, site, source type, volume, collection tube).
+      One row per purified plasma ID. Anchor: samples (purified_plasma_id). Excludes Hitachi Cup
+      and Falcon Tube specimens; when a purified plasma has several qualifying sample rows, the
+      highest sample_id is kept.
+    columns:
+      - name: request_id
+        data_type: VARCHAR
+        description: Test request the purified plasma belongs to.
+      - name: purified_plasma_id
+        data_type: VARCHAR
+        data_tests:
+          - unique
+          - not_null
+        description: Purified plasma tube label (samples.purified_plasma_id). Primary key.
+      - name: study_id
+        data_type: VARCHAR
+        description: Study the sample is enrolled in.
+      - name: study_site_description
+        data_type: VARCHAR
+        description: Clinical site that collected the blood draw.
+      - name: source_sample_type_id
+        data_type: VARCHAR
+        description: Sample type of the parent sample family (e.g., Whole Blood).
+      - name: purified_plasma_volume
+        data_type: FLOAT
+        description: Purified plasma volume.
+      - name: collection_tube_type
+        data_type: VARCHAR
+        description: Blood collection tube type for the request ('EDTA' or 'Streck BCT DNA'), if recorded.

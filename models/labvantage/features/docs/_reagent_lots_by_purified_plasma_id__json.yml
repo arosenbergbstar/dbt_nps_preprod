@@ -1,0 +1,19 @@
+version: 2
+models:
+  - name: reagent_lots_by_purified_plasma_id__json
+    description: >
+      Manufacturer lot numbers of reagents used on a purified plasma, as a single JSON object.
+      One row per purified plasma ID. Anchor: samples (purified_plasma_id). Null lots are
+      excluded.
+    columns:
+      - name: purified_plasma_id
+        data_type: VARCHAR
+        data_tests:
+          - unique
+          - not_null
+        description: Purified plasma tube label (samples.purified_plasma_id). Primary key.
+      - name: reagent_lots
+        data_type: OBJECT
+        description: >
+          Object keyed by reagent_type_id. The value is the manufacturer lot when one was used, or
+          an ordered array of lots when several were.

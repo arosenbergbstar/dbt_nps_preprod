@@ -1,0 +1,76 @@
+version: 2
+models:
+  - name: int_timestamps_by_purified_plasma_id
+    description: >
+      One row per purified plasma ID and request with the earliest timestamp of
+      each lab workflow step, truncated to the second. Purified Plasma and
+      control samples (NTC, Pool, 5hmC Negative, 5hmC Positive) supply the
+      purified plasma rows, excluding Falcon Tube and Hitachi Cup specimens.
+      Requests that have no purified plasma sample get one row with a null
+      purified_plasma_id, using timestamps from their Whole Blood or Plasma
+      samples. Array operation timestamps come from array_items and the
+      flow cell processing timestamp from tasks.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - purified_plasma_id
+            - request_id
+    columns:
+      - name: purified_plasma_id
+        description: >
+          Purified plasma sample ID. Null for requests with no purified plasma
+          sample.
+      - name: request_id
+        description: "Request the sample belongs to."
+      - name: collected_at
+        description: "Earliest source sample collection timestamp."
+      - name: received_at
+        description: "Earliest sample received timestamp."
+      - name: cfdna_extraction_instrument_at
+        description: "First 'cfDNA Extraction Instrument' array operation."
+      - name: cfdna_extraction_at
+        description: "First 'cfDNA Extraction' array operation."
+      - name: cfdna_stock_at
+        description: "First 'cfDNA Stock' array operation."
+      - name: cfdna_spectramax_at
+        description: "First 'cfDNA Spectramax' array operation."
+      - name: cfdna_norm_plate_at
+        description: "First 'cfDNA Norm Plate' array operation."
+      - name: cfdna_norm_at
+        description: "First 'cfDNA Norm' array operation."
+      - name: library_prep_at
+        description: "First 'Library Prep' array operation."
+      - name: wgs_library_at
+        description: "First 'WGS Library' array operation."
+      - name: wgs_stock_at
+        description: "First 'WGS Stock' array operation."
+      - name: wgs_spectramax_at
+        description: "First 'WGS Spectramax' array operation."
+      - name: wgs_norm_plate_at
+        description: "First 'WGS Norm Plate' array operation."
+      - name: wgs_norm_at
+        description: "First 'WGS Norm' array operation."
+      - name: wgs_pool_at
+        description: "First 'WGS Pool' array operation."
+      - name: wgs_sequencing_at
+        description: "First 'WGS Sequencing' array operation."
+      - name: hmc_label_at
+        description: "First '5hmC Label' array operation."
+      - name: hmc_library_at
+        description: "First '5hmC Library' array operation."
+      - name: hmc_stock_at
+        description: "First '5hmC Stock' array operation."
+      - name: hmc_spectramax_at
+        description: "First '5hmC Spectramax' array operation."
+      - name: hmc_norm_plate_at
+        description: "First '5hmC Norm Plate' array operation."
+      - name: hmc_norm_at
+        description: "First '5hmC Norm' array operation."
+      - name: hmc_pool_at
+        description: "First '5hmC Pool' array operation."
+      - name: hmc_sequencing_at
+        description: "First '5hmC Sequencing' array operation."
+      - name: flowcell_processing_completed_at
+        description: "Earliest flow cell processing completion from tasks."
+      - name: cancelled_at
+        description: "Earliest sample cancellation timestamp."

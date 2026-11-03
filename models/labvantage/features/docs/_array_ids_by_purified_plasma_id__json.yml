@@ -1,0 +1,19 @@
+version: 2
+models:
+  - name: array_ids_by_purified_plasma_id__json
+    description: >
+      Array IDs for each array type a purified plasma went through, as a single JSON object.
+      One row per purified plasma ID. Anchor: samples (purified_plasma_id). Placeholder
+      arrays (array_id like 'Pla-%') are excluded.
+    columns:
+      - name: purified_plasma_id
+        data_type: VARCHAR
+        data_tests:
+          - unique
+          - not_null
+        description: Purified plasma tube label (samples.purified_plasma_id). Primary key.
+      - name: arrays
+        data_type: OBJECT
+        description: >
+          Object keyed by array_desc. The value is the array ID when the purified plasma is on one
+          array of that type, or an ordered array of array IDs when it is on several.

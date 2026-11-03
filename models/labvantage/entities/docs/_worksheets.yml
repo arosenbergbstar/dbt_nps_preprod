@@ -1,0 +1,70 @@
+version: 2
+models:
+  - name: worksheets
+    description: >
+      Report worksheets linked to test requests through their sample SDIs, with the report
+      subtype (initial, amended, corrected) derived from the worksheet report type or template.
+      One row per worksheet version per linked sample, so a worksheet can appear more than once
+      for a request if several of the request's samples are on it.
+    config:
+      materialized: table
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - worksheet_id
+              - worksheet_version_number
+              - request_id
+    columns:
+      - name: worksheet_id
+        data_type: VARCHAR
+        data_tests:
+          - not_null
+        description: LabVantage worksheet ID.
+      - name: worksheet_version_number
+        data_type: NUMBER
+        data_tests:
+          - not_null
+        description: Worksheet version number.
+      - name: template_id
+        data_type: VARCHAR
+        description: Worksheet template the worksheet was created from (e.g., 'Patient Report Panc_W').
+      - name: created_at
+        data_type: TIMESTAMP_TZ
+        description: Timestamp the worksheet was created.
+      - name: source_report_type
+        data_type: VARCHAR
+        description: Report type as recorded on the worksheet (e.g., 'Amended', 'Corrected').
+      - name: report_subtype
+        data_type: VARCHAR
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['amended', 'corrected', 'initial']
+              config:
+                severity: warn
+        description: >
+          'amended' or 'corrected' from the worksheet report type; 'initial' for the patient
+          report templates; otherwise 'unclassified'. Warn on 'unclassified'.
+      - name: report_type
+        data_type: VARCHAR
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['amended_corrected', 'initial']
+              config:
+                severity: warn
+        description: >
+          Rollup of report_subtype ('amended_corrected', 'initial', or 'unclassified'),
+          matching reports.report_type. Warn on 'unclassified'.
+      - name: request_id
+        data_type: VARCHAR
+        data_tests:
+          - not_null
+        description: Test request linked to the worksheet via its sample.
+      - name: trf_id
+        data_type: VARCHAR
+        description: Test Requisition Form ID of the linked request.
+      - name: study_id
+        data_type: VARCHAR
+        description: Study of the linked request.

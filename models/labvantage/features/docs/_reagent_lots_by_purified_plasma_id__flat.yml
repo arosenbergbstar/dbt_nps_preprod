@@ -1,0 +1,152 @@
+version: 2
+models:
+  - name: reagent_lots_by_purified_plasma_id__flat
+    description: >
+      Manufacturer lot numbers of reagents used on a purified plasma, one column per reagent
+      type. One row per purified plasma ID. Anchor: samples (purified_plasma_id). Where more
+      than one lot of a reagent type was used, the max lot is kept.
+    columns:
+      - name: purified_plasma_id
+        data_type: VARCHAR
+        data_tests:
+          - unique
+          - not_null
+        description: Purified plasma tube label (samples.purified_plasma_id). Primary key.
+      - name: te_buffer_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'TE Buffer (1X)' (max if more than one).
+      - name: molecular_grade_h2o_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'Molecular Grade H2O' (max if more than one).
+      - name: ethanol_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'Ethanol (100%)' (max if more than one).
+      - name: ampure_xp_beads_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'AMPure XP Beads' (max if more than one).
+      - name: quant_it_picogreen_dsdna_reagent_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'Quant-iT PicoGreen dsDNA Reagent' (max if more than one).
+      - name: eb_buffer_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'EB Buffer' (max if more than one).
+      - name: phix_control_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'PhiX Control' (max if more than one).
+      - name: novaseq_6000_buffer_cartridge_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'NovaSeq 6000 Buffer Cartridge' (max if more than one).
+      - name: novaseq_6000_sbs_cartridge_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'NovaSeq 6000 SBS Cartridge (200 cycles)' (max if more than one).
+      - name: tris_hcl_ph_80_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of '1M Tris HCL pH 8.0' (max if more than one).
+      - name: qubit_1x_dsdna_hs_assay_kit_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'Qubit 1X dsDNA HS Assay Kit' (max if more than one).
+      - name: indexing_primer_plate_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'Indexing primer plate' (max if more than one).
+      - name: lambda_dna_standard_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'Lambda DNA Standard' (max if more than one).
+      - name: naoh_1n_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of '1 N NaOH' (max if more than one).
+      - name: novaseq_6000_s2_flow_cell_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'NovaSeq 6000 S2 Flow Cell' (max if more than one).
+      - name: novaseq_6000_s2_cluster_cartridge_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'NovaSeq 6000 S2 Cluster Cartridge' (max if more than one).
+      - name: kapa_hifi_hs_rm_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'KAPA HiFi HS RM (2X)' (max if more than one).
+      - name: hmc_labeling_buffer_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of '5hmC Labeling Buffer (10X)' (max if more than one).
+      - name: biotin_plate_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'Biotin Plate (Resuspended)' (max if more than one).
+      - name: sequencing_adapter_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'Sequencing Adapter' (max if more than one).
+      - name: kapa_hyper_prep_kit_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'KAPA Hyper Prep Kit' (max if more than one).
+      - name: udp_azide_glucose_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'UDP-Azide-Glucose' (max if more than one).
+      - name: beta_glucosyltransferase_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'Beta-Glucosyltransferase' (max if more than one).
+      - name: dynabeads_m270_streptavidin_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'Dynabeads M270 Streptavidin' (max if more than one).
+      - name: hmc_wash_buffer_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of '5hmC Wash Buffer (2X)' (max if more than one).
+      - name: salmon_sperm_dna_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'Salmon Sperm DNA' (max if more than one).
+      - name: spiked_kapa_hifi_hs_rm_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'Spiked KAPA HiFi HS RM (2X)' (max if more than one).
+      - name: dynabeads_myone_silane_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'Dynabeads MyOne Silane' (max if more than one).
+      - name: sds_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'SDS (20%)' (max if more than one).
+      - name: magmax_lysis_buffer_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'MagMax Lysis Buffer' (max if more than one).
+      - name: magmax_elution_buffer_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'MagMax Elution Buffer' (max if more than one).
+      - name: magmax_wash_buffer_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'MagMax Wash Buffer' (max if more than one).
+      - name: dmso_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'DMSO' (max if more than one).
+      - name: naoh_2n_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of '2N NaOH' (max if more than one).
+      - name: eral_cocktail_spike_in_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'ERAL Cocktail Spike-In' (max if more than one).
+      - name: spiked_proteinase_k_mix_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'Spiked Proteinase K Mix' (max if more than one).
+      - name: spike_in_control_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'Spike-In Control' (max if more than one).
+      - name: proteinase_k_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'Proteinase K' (max if more than one).
+      - name: novaseq_6000_sp_cluster_cartridge_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'NovaSeq 6000 SP Cluster Cartridge' (max if more than one).
+      - name: novaseq_6000_sp_flow_cell_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'NovaSeq 6000 SP Flow Cell' (max if more than one).
+      - name: novaseq_6000_s1_flow_cell_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'NovaSeq 6000 S1 Flow Cell' (max if more than one).
+      - name: novaseq_6000_s1_cluster_cartridge_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'NovaSeq 6000 S1 Cluster Cartridge' (max if more than one).
+      - name: naoh_5m_ph12_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'NaOH (5M, pH 12)' (max if more than one).
+      - name: tris_hcl_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'Tris-HCL (1M, pH 8.0)' (max if more than one).
+      - name: novaseq_s2_kit_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'NovaSeq S2 Kit (200 cycles, v1.5)' (max if more than one).
+      - name: novaseq_s1_kit_lot_number
+        data_type: VARCHAR
+        description: Manufacturer lot of 'NovaSeq S1 Kit (200 cycles, v1.5)' (max if more than one).

@@ -1,0 +1,22 @@
+version: 2
+models:
+  - name: turnaround_times_by_trf_id__flat
+    description: >
+      Turnaround time from first sample receipt to initial report. One row per request that
+      has an initial report. Anchor: requests (request_id).
+    columns:
+      - name: trf_id
+        data_type: VARCHAR
+        description: Test Requisition Form ID.
+      - name: request_id
+        data_type: VARCHAR
+        data_tests:
+          - unique
+          - not_null
+        description: LabVantage test request ID. Primary key.
+      - name: ctat_in_days
+        data_type: NUMBER
+        description: Calendar days from the earliest sample receipt to the initial report.
+      - name: btat_in_days
+        data_type: NUMBER
+        description: Business days (Mon-Fri, both endpoints inclusive) from the earliest sample receipt to the initial report.

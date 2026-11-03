@@ -1,0 +1,24 @@
+version: 2
+models:
+  - name: extraction_order_purified_plasma_id__tall
+    description: >
+      Order in which each purified plasma of a request was extracted to cfDNA. One row per
+      request per purified plasma ID. Anchor: samples (purified_plasma_id).
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - request_id
+              - purified_plasma_id
+    columns:
+      - name: request_id
+        data_type: VARCHAR
+        description: LabVantage test request ID. Part of composite primary key.
+      - name: purified_plasma_id
+        data_type: VARCHAR
+        data_tests:
+          - not_null
+        description: Purified plasma tube label (samples.purified_plasma_id). Part of composite primary key.
+      - name: extraction_order
+        data_type: NUMBER
+        description: 1-based rank of the purified plasma's earliest cfDNA sample creation time within the request.

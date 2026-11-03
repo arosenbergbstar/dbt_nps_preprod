@@ -1,0 +1,36 @@
+version: 2
+models:
+  - name: reagent_lots
+    description: >
+      Maps reagent lots to the array items where they were used, by traversing the
+      trackitem → arrayzonecontent → arrayitemarrayzone chain. Identifies which specific
+      reagent lots were consumed at each well position in an array.
+    config:
+      materialized: table
+    # Conferring with Lab Ops on how to achieve a primary key for this model
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - array_item_id
+              - reagent_type_id
+              - manufacturer_lot
+    columns:
+      - name: array_item_id
+        data_type: VARCHAR
+        description: Unique identifier for the array item where the reagent was used. Part of composite primary key.
+      - name: container_type_id
+        data_type: VARCHAR
+        description: Type of container the reagent lot is stored in (e.g., tube, plate well).
+      - name: reagent_type_id
+        data_type: VARCHAR
+        data_tests:
+          - not_null
+        description: Type/category of the reagent (e.g., adapter, enzyme, kit component). Part of composite primary key.
+      - name: reagent_class
+        data_type: VARCHAR
+        description: Broader classification of the reagent within the reagent type hierarchy.
+      - name: manufacturer_lot
+        data_type: VARCHAR
+        description: Manufacturer-assigned lot number for traceability and QC purposes.
+  

@@ -1,0 +1,32 @@
+version: 2
+models:
+  - name: assigned_tests_by_trf_id__tall
+    description: >
+      Tests assigned to each request, from splitting requests.work_item_id on ';'. One row per
+      request per assigned test. Anchor: requests (request_id).
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - request_id
+              - purified_plasma_test_id
+    columns:
+      - name: request_id
+        data_type: VARCHAR
+        data_tests:
+          - not_null
+        description: LabVantage test request ID. Part of composite primary key.
+      - name: trf_id
+        data_type: VARCHAR
+        description: Test Requisition Form ID of the request.
+      - name: purified_plasma_test_id
+        data_type: VARCHAR
+        data_tests:
+          - not_null
+        description: One assigned test (work item) ID, e.g. LDT_PancV2. Part of composite primary key.
+      - name: pipeline_name
+        data_type: VARCHAR
+        description: Bioinformatics pipeline for the test, mapped by the map_workflow_type macro.
+      - name: is_multitest_request
+        data_type: BOOLEAN
+        description: True if the request has more than one distinct assigned test.

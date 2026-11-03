@@ -30,7 +30,8 @@ data_tests:
 # using the `{{ config(...) }}` macro.
 models:
     dbt_nps:
-        +dbt-osmosis: "docs/_{model}.yml"
+        +meta:
+            dbt-osmosis: "docs/_{model}.yml"
         +grants:
             select: ["TRANSFORMER", "TRANSFORMER_DEV", "SVC_METAPLANE_ROLE"]
         +persist_docs:

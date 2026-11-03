@@ -1,7 +1,6 @@
 with
     {#
-        Transformation recreated from dbt_prod stg_clia_pipeline_jobs (only the
-        columns needed here).
+        Filter and dedupe logic recreated from dbt_prod stg_clia_pipeline_jobs.
 
         The status filter drops the init (null) record; there are usually 3 records
         per run - null (init), started, completed.
@@ -10,10 +9,7 @@ with
         (eg ps002785), so later re-runs are ignored. They don't affect CLIA samples.
     #}
     clia_pipeline_jobs as (
-        select
-            job_id::string as job_id,
-            pipeline_status::string as pipeline_status,
-            emitted_at::timestamp_tz as emitted_at
+        select job_id, pipeline_status, emitted_at
         from {{ ref("clia_pipeline__jobs") }}
         where event != 'REMOVE' and pipeline_status is not null
         qualify

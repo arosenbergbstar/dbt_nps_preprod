@@ -25,6 +25,7 @@ with
             report_event_id::text as report_event_id,
             -- seems to always be 0
             report_event_item_id::text as report_event_item_id,
+            item_key_id_1::text as request_id,
             item_key_id_1::text as item_key_id_1,
             nullif(item_key_id_2, '(null)')::text as item_key_id_2,
             nullif(item_key_id_3, '(null)')::text as item_key_id_3,

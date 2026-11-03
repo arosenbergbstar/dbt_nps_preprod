@@ -9,31 +9,13 @@ with
     sequencing_run_metrics as (
         select
             right(sequencing_run_id, 9) as flow_cell_id,
-            case
-                when demux_rate = 'None' then null else demux_rate::float
-            end as demux_rate,
-            case
-                when demux_basepair_yield_q30_pct = 'None'
-                then null
-                else demux_basepair_yield_q30_pct::float
-            end as demux_basepair_yield_q30_pct,
-            case
-                when total_reads = 'None' then null else total_reads::number
-            end as total_reads,
-            case
-                when demux_reads = 'None' then null else demux_reads::number
-            end as demux_reads,
-            case
-                when sequencing_run_id = 'None' then null else sequencing_run_id::string
-            end as sequencing_run_id,
-            case
-                when total_reads_pf = 'None' then null else total_reads_pf::number
-            end as total_reads_pf,
-            case
-                when total_reads_pf_pct = 'None'
-                then null
-                else total_reads_pf_pct::float
-            end as total_reads_pf_pct,
+            demux_rate,
+            demux_basepair_yield_q30_pct,
+            total_reads,
+            demux_reads,
+            sequencing_run_id,
+            total_reads_pf,
+            total_reads_pf_pct,
             emitted_at
         from {{ ref("clia_pipeline__sequencing_run_metrics") }}
         where event != 'REMOVE'
@@ -44,13 +26,13 @@ with
             )
             = 1
     ),
-    {# Recreated from dbt_prod stg_arrayarraymethoditems / dim_flowcell_methods #}
+    {# Logic recreated from dbt_prod dim_flowcell_methods #}
     flowcell_methods as (
         select
-            arrayid::varchar as flowcell_id,
-            cast(split(arraymethodid::varchar, '-')[0] as varchar) as flowcell_method,
+            array_id as flowcell_id,
+            split(array_method_id, '-')[0]::varchar as flowcell_method,
             regexp_substr(flowcell_method, '(S[P124])') as flowcell_method_abbv
-        from {{ ref("arrayarraymethoditem") }}
+        from {{ ref("lv__arrayarraymethoditem") }}
         where
             flowcell_method_abbv in ('SP', 'S1', 'S2', 'S4')
             and flowcell_id not like '%TEST%'

@@ -6,24 +6,18 @@ with
         U means pending, the note is required for on hold.
     #}
     issues_all as (
-        select
-            keyid1 as request_id,
-            approvalflag as approval_tag,
-            notes,
-            revieweddt as reviewed_at,
-            reviewedby as reviewed_by
-        from {{ ref("a_sdiapprovalstep") }}
-        where (lower(notes) like '%on hold%' and approvalflag = 'U') or approvalflag = 'F'
+        select key_id_1 as request_id, approval_flag, reviewed_at, reviewed_by
+        from {{ ref("lv__a_sdiapprovalstep") }}
+        where
+            (lower(notes) like '%on hold%' and approval_flag = 'U')
+            or approval_flag = 'F'
     ),
     issues_current as (
-        select
-            keyid1 as request_id,
-            approvalflag as approval_tag,
-            notes,
-            revieweddt as reviewed_at,
-            reviewedby as reviewed_by
-        from {{ ref("sdiapprovalstep") }}
-        where (lower(notes) like '%on hold%' and approvalflag = 'U') or approvalflag = 'F'
+        select key_id_1 as request_id
+        from {{ ref("lv__sdiapprovalstep") }}
+        where
+            (lower(notes) like '%on hold%' and approval_flag = 'U')
+            or approval_flag = 'F'
     ),
     main as (
         select
@@ -32,7 +26,7 @@ with
             issues_all.reviewed_by,
             iff(issues_current.request_id is not null, true, false) is_active_issue,
             case
-                issues_all.approval_tag when 'U' then 'On Hold' when 'F' then 'Rejected'
+                issues_all.approval_flag when 'U' then 'On Hold' when 'F' then 'Rejected'
             end issue_type
         from issues_all
         left join issues_current on issues_all.request_id = issues_current.request_id

@@ -1,31 +1,23 @@
 with
-    {# Transformation recreated from dbt_prod stg_arrays #}
+    {# Filters recreated from dbt_prod stg_arrays #}
     arrays as (
-        select
-            arrayid::varchar as array_id,
-            arraydesc::varchar as array_desc,
-            arraylayoutid::varchar as array_layout_id,
-            createdt::timestamp_tz as create_at,
-            moddt::timestamp_tz as mod_at
-        from {{ ref("array") }}
+        select array_id, array_desc, array_layout_id
+        from {{ ref("lv__array") }}
         where
             array_id not like 'TEST%'
             and array_id not like 'SDBB%'
             and array_id not ilike '%TEST%'
     ),
-    {# Transformation recreated from dbt_prod stg_arrayitems #}
     arrayitems as (
         select
-            arrayitemid::varchar as array_item_id,
-            arrayid::varchar as array_id,
-            createdt::timestamp as create_at,
-            moddt::timestamp as mod_at,
-            createby::varchar as create_by,
-            modby::varchar as mod_by,
-            itemlabel::varchar as array_location,
-            verticallabel::varchar as array_location_v,
-            horizontallabel::varchar as array_location_h
-        from {{ ref("arrayitem") }}
+            array_item_id,
+            array_id,
+            item_label,
+            created_by,
+            modified_by,
+            created_at,
+            modified_at
+        from {{ ref("lv__arrayitem") }}
     ),
     arrayitemcontents as (
         select
@@ -66,7 +58,7 @@ with
                 arrays.array_desc
             ) as array_desc,
             arrays.array_layout_id,
-            arrayitems.array_location as well_location,
+            arrayitems.item_label as well_location,
             case
                 {# 
                     This is an edge case where the array was set to all dashes. 
@@ -78,10 +70,10 @@ with
             end as operation_name,
             iff(arrays.array_desc ilike '%Failed%', true, false) as is_failed_array,
             iff(arrayitemcontents.content_item = 'Control', true, false) is_control,
-            arrayitems.create_by as created_by,
-            arrayitems.mod_by as mod_by,
-            arrayitems.create_at as created_at,
-            arrayitems.mod_at as mod_at
+            arrayitems.created_by,
+            arrayitems.modified_by as mod_by,
+            arrayitems.created_at,
+            arrayitems.modified_at as mod_at
         from arrays
         inner join arrayitems using (array_id)
         inner join arrayitemcontents using (array_item_id)

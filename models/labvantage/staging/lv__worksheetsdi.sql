@@ -25,6 +25,8 @@ with
             worksheet_id::text as worksheet_id,
             sdc_id::text as sdc_id,
             key_id_1::text as key_id_1,
+            {# Alias carried over from dbt_prod stg_worksheetsdi. #}
+            key_id_1::text as sample_id,
             nullif(key_id_2, '(null)')::text as key_id_2,
             nullif(key_id_3, '(null)')::text as key_id_3,
             worksheet_version_number::int as worksheet_version_number,

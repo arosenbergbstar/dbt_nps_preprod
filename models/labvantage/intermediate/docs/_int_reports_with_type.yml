@@ -11,9 +11,10 @@ models:
       fact_report_special_types.
     data_tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - request_id
-            - report_subtype
+          arguments:
+            combination_of_columns:
+              - request_id
+              - report_subtype
     columns:
       - name: request_id
         description: "Request the report event is linked to."
@@ -29,7 +30,8 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['initial', 'amended', 'corrected']
+              arguments:
+                values: ['initial', 'amended', 'corrected']
       - name: is_qns_reportid
         description: >
           True if the report ID is a fast-track QNS report. Renamed from

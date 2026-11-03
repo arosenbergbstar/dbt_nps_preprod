@@ -12,9 +12,10 @@ models:
       flow cell processing timestamp from tasks.
     data_tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - purified_plasma_id
-            - request_id
+          arguments:
+            combination_of_columns:
+              - purified_plasma_id
+              - request_id
     columns:
       - name: purified_plasma_id
         description: >

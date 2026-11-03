@@ -26,9 +26,10 @@ models:
           Value should be between 0 and 1, or NULL for failed samples.
         tests:
           - dbt_utils.accepted_range:
-              min_value: 0
-              max_value: 1
-              inclusive: true
+              arguments:
+                min_value: 0
+                max_value: 1
+                inclusive: true
 
       - name: hmc_zero_cpg_count
         description: >

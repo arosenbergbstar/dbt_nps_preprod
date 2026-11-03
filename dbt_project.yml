@@ -107,5 +107,3 @@ models:
             +materialized: table
             +tags:
                 - "hourly"
-        export:
-            +database: export

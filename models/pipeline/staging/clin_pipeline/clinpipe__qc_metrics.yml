@@ -23,13 +23,15 @@ models:
           NULL indicates a failed sample (unique_fragments = 0).
         tests:
           - dbt_utils.accepted_range:
-              min_value: 0
-              max_value: 1
-              inclusive: true
+              arguments:
+                min_value: 0
+                max_value: 1
+                inclusive: true
 
       - name: hmc_unique_fragments
         description: Number of unique HMC fragments
         tests:
           - dbt_utils.accepted_range:
-              min_value: 0
-              inclusive: true
+              arguments:
+                min_value: 0
+                inclusive: true

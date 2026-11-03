@@ -31,6 +31,7 @@ models:
           # warn: 'exception' is an expected, flagged outcome for unrecognized
           # legacy source arrays. Promote to error if those are resolved.
           - accepted_values:
-              values: ['hmc', 'wgs']
+              arguments:
+                values: ['hmc', 'wgs']
               config:
                 severity: warn

@@ -7,9 +7,10 @@ models:
       subtype from int_reports_with_type, truncated to the second.
     data_tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - trf_id
-            - request_id
+          arguments:
+            combination_of_columns:
+              - trf_id
+              - request_id
     columns:
       - name: trf_id
         description: "Test requisition form ID."

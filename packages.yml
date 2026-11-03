@@ -4,4 +4,4 @@ packages:
   - package: entechlog/dbt_snow_mask
     version: 0.2.6
   - package: dbt-labs/dbt_external_tables
-    version: 0.10.0
+    version: 0.12.4

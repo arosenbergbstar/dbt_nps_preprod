@@ -18,14 +18,20 @@ sources:
           - name: event
             data_type: text
             description: "Event type"
-            expression: >
-              split_part(split_part(METADATA$FILENAME, 'jobs_status/', 2), '.', 1)
+            config:
+              meta:
+                expression: >-
+                  split_part(split_part(METADATA$FILENAME, 'jobs_status/', 2), '.', 1)
           - name: modified_at
             data_type: timestamp_tz
             description: "Timestamp of when the file was last modified"
-            expression: to_timestamp(metadata$FILE_LAST_MODIFIED)
+            config:
+              meta:
+                expression: to_timestamp(metadata$FILE_LAST_MODIFIED)
           - name: hash_id
             data_type: text
             description: >
               hash of the file contents
-            expression: metadata$FILE_CONTENT_KEY
+            config:
+              meta:
+                expression: metadata$FILE_CONTENT_KEY

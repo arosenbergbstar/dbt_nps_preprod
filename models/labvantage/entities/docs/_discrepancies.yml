@@ -20,12 +20,6 @@ models:
         data_tests:
           - not_null
         description: Unique identifier for the sample with a recorded discrepancy.
-      - name: trf_id
-        data_type: VARCHAR
-        description: Test Requisition Form ID of the associated request.
-      - name: purified_plasma_id
-        data_type: VARCHAR
-        description: Purified plasma tube label for the sample.
       - name: discrepancy_type
         data_type: VARCHAR
         data_tests:
@@ -40,9 +34,9 @@ models:
         data_tests:
           - not_null
         description: Detailed reason text describing the specific discrepancy.
-      - name: createdt
-        data_type: TIMESTAMP_TZ
-        description: Timestamp when the discrepancy record was created.
-      - name: moddt
-        data_type: TIMESTAMP_TZ
-        description: Timestamp when the discrepancy record was last modified.
+      # - name: createdt
+      #   data_type: TIMESTAMP_TZ
+      #   description: Timestamp when the discrepancy record was created.
+      # - name: moddt
+      #   data_type: TIMESTAMP_TZ
+      #   description: Timestamp when the discrepancy record was last modified.

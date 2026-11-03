@@ -155,7 +155,6 @@ with
             uncertainty_display_format_upper::text as uncertainty_display_format_upper,
             external_reference::text as external_reference,
             instrument_field_id::text as instrument_field_id,
-            display_value_format::text as display_value_format,
             ac_overridden_flag::text as ac_overridden_flag,
             measurement_action_id::text as measurement_action_id,
             notes::text as notes,

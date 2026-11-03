@@ -9,7 +9,7 @@ sources:
         external:
           location: "@{{ env_var('DBT_RAW_DB', 'RAW') }}.clin_pipeline_snowpipe.jobs_status" # reference an existing external stage
           file_format: "( type = json )" # fully specified here, or reference an existing file format
-          auto_refresh: true # requires configuring an event notification from Amazon S3 or Azure
+          # auto_refresh: true # requires configuring an event notification from Amazon S3 or Azure
 
         # all Snowflake external tables natively include a `metadata$filename` pseudocolumn
         # and a `value` column (JSON blob-ified version of file contents), so there is no need to specify

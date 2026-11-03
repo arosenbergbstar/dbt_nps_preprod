@@ -24,4 +24,3 @@ with
     )
 select *
 from typed
-order by updated_at desc

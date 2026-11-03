@@ -2,7 +2,7 @@ with
     studies as (
         select
             study_id, study_type, patient_report_type, study_description, study_status
-        from {{ source("labvantage", "lv__s_study") }}
+        from {{ ref("lv__s_study") }}
     ),
     {#
         Aggregates BioClin deliverables into a flat JSON array per study.
@@ -15,7 +15,7 @@ with
             array_agg(bioclin_deliverable) within group (
                 order by deliverable_id
             ) as bfx_deliverables
-        from {{ source("labvantage", "lv__u_bioclindeliverables") }}
+        from {{ ref("lv__u_bioclindeliverables") }}
         where bioclin_deliverable is not null
         group by study_id
     ),

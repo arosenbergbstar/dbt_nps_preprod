@@ -1,4 +1,27 @@
 with
+    {#
+        Transformation recreated from dbt_prod stg_clia_pipeline_jobs (only the
+        columns needed here).
+
+        The status filter drops the init (null) record; there are usually 3 records
+        per run - null (init), started, completed.
+        The dedupe keeps the earliest record per job/status. Most instances where
+        duplicates come up involve an extra completed record but no started record
+        (eg ps002785), so later re-runs are ignored. They don't affect CLIA samples.
+    #}
+    clia_pipeline_jobs as (
+        select
+            job_id::string as job_id,
+            pipeline_status::string as pipeline_status,
+            emitted_at::timestamp_tz as emitted_at
+        from {{ ref("clia_pipeline__jobs") }}
+        where event != 'REMOVE' and pipeline_status is not null
+        qualify
+            row_number() over (
+                partition by job_id, pipeline_status order by emitted_at asc
+            )
+            = 1
+    ),
     timestamps as (
         select
             job_id,
@@ -7,11 +30,7 @@ with
             max(
                 iff(pipeline_status = 'ERROR', true, false)
             ) as has_pipeline_completed_with_error
-        {# 
-            should be base, but it's a view and takes forever to run.
-            need to change materialization to table
-        #}
-        from {{ ref("stg_clia_pipeline_jobs") }}
+        from clia_pipeline_jobs
         group by job_id
     )
 

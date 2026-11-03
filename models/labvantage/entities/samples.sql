@@ -21,7 +21,7 @@ with
             cancelleddt as cancelled_at,
             createdt as create_at,
             moddt as mod_at
-        from {{ source("labvantage", "s_sample") }}
+        from {{ ref("s_sample") }}
     ),
     samplefamilies as (
         select
@@ -29,11 +29,11 @@ with
             collectiondt as collection_at,
             studysiteid as study_site_id,
             sampletypeid as sample_type_id
-        from {{ source("labvantage", "s_samplefamily") }}
+        from {{ ref("s_samplefamily") }}
     ),
     studysite as (
         select study_site_id, study_site_description
-        from {{ source("labvantage", "lv__s_studysite") }}
+        from {{ ref("lv__s_studysite") }}
     ),
     main as (
         select

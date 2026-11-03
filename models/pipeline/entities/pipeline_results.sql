@@ -2,7 +2,7 @@ with
     clinpipe__jobs_status as (
         {{
             dbt_utils.deduplicate(
-                relation=source("clin_pipeline", "clinpipe__jobs_status"),
+                relation=ref("clinpipe__jobs_status"),
                 partition_by="job_id",
                 order_by="updated_at desc",
             )
@@ -11,7 +11,7 @@ with
     clinpipe__model_results_cancer as (
         {{
             dbt_utils.deduplicate(
-                relation=source("clin_pipeline", "clinpipe__model_results_cancer"),
+                relation=ref("clinpipe__model_results_cancer"),
                 partition_by="job_id",
                 order_by="emitted_at desc",
             )
@@ -20,7 +20,7 @@ with
     clinpipe__qc_metrics as (
         {{
             dbt_utils.deduplicate(
-                relation=source("clin_pipeline", "clinpipe__qc_metrics"),
+                relation=ref("clinpipe__qc_metrics"),
                 partition_by="job_id",
                 order_by="emitted_at desc",
             )
@@ -66,12 +66,12 @@ with
                     is_pass_wgs_unique_fragments
                 )::integer
             )::boolean as is_pass_qc_all
-        from {{ source("clin_pipeline", "clinpipe__qc_metrics") }}
+        from {{ ref("clinpipe__qc_metrics") }}
     ),
     clinpipe__model_results_toto as (
         {{
             dbt_utils.deduplicate(
-                relation=source("clin_pipeline", "clinpipe__model_results_toto"),
+                relation=ref("clinpipe__model_results_toto"),
                 partition_by="job_id",
                 order_by="emitted_at desc",
             )
@@ -80,7 +80,7 @@ with
     clinpipe__model_results_fut as (
         {{
             dbt_utils.deduplicate(
-                relation=source("clin_pipeline", "clinpipe__model_results_fut"),
+                relation=ref("clinpipe__model_results_fut"),
                 partition_by="job_id",
                 order_by="emitted_at desc",
             )

@@ -15,8 +15,24 @@ with
         group by 1
     ),
     int_timestamps_by_trf_id as (select * from {{ ref("int_timestamps_by_trf_id") }}),
+    {#
+        Recreated from the dbt_prod dim_dates date spine (only the columns needed
+        here). Business days = weekdays; holidays are not excluded, matching the
+        original logic.
+    #}
+    date_spine as (
+        {{
+            dbt_utils.date_spine(
+                start_date="to_date('01/01/1900', 'mm/dd/yyyy')",
+                datepart="day",
+                end_date="dateadd(year, 40, current_date)",
+            )
+        }}
+    ),
     business_days as (
-        select * from {{ ref("dim_dates") }} where day_name not in ('Sat', 'Sun')
+        select date_day, date_day as date_actual, dayname(date_day) as day_name
+        from date_spine
+        where dayname(date_day) not in ('Sat', 'Sun')
     ),
     ctat as (
         {# If Reports are generated #}

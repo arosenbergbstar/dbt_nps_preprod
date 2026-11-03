@@ -13,7 +13,7 @@ with
                 1.0 * wgs_qc_zero_cpg / wgs_qc_unique_fragments,
                 null
             )::varchar as wgs_qc_zero_cpg
-        from {{ source("clia_pipeline", "results") }}
+        from {{ ref("clia_pipeline__results") }}
         where event like 'J-%'
     ),
     unpivoted as (
@@ -39,7 +39,7 @@ with
     ),
     result_qc_thresholds as (
         select *, {{ map_workflow_type("workflow_type") }} as pipeline_name
-        from {{ source("labvantage", "lv__specparamlimits") }}
+        from {{ ref("lv__specparamlimits") }}
         where
             pipeline_name in ('pancreatic', 'ovarian')
             and param_list_id in ('WGS Sample', '5hmC Sample')

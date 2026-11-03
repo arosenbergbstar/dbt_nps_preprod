@@ -1,0 +1,288 @@
+version: 2
+models:
+  - name: lv__s_sample_pii
+    columns:
+      - name: sample_id
+        data_type: string
+      - name: cancelled_by
+        data_type: string
+      - name: cancelled_at
+        data_type: timestamp
+      - name: collected_by
+        data_type: string
+      - name: collected_at
+        data_type: timestamp
+      - name: completed_at
+        data_type: timestamp
+      - name: confirmed_by
+        data_type: string
+      - name: confirmed_at
+        data_type: timestamp
+      - name: created_by
+        data_type: string
+      - name: created_at
+        data_type: timestamp
+      - name: disposal_status
+        data_type: string
+      - name: disposed_by
+        data_type: string
+      - name: disposed_at
+        data_type: timestamp
+      - name: due_at
+        data_type: timestamp
+      - name: modified_by
+        data_type: string
+      - name: modified_at
+        data_type: timestamp
+      - name: is_pooled
+        data_type: boolean
+      - name: prep_type_id
+        data_type: string
+      - name: previous_storage_status
+        data_type: string
+      - name: priority
+        data_type: string
+      - name: received_at
+        data_type: timestamp
+      - name: is_receive_required
+        data_type: boolean
+      - name: request_id
+        data_type: string
+      - name: request_item_detail_id
+        data_type: string
+      - name: request_item_id
+        data_type: string
+      - name: has_restrictions
+        data_type: boolean
+      - name: sample_family_id
+        data_type: string
+      - name: sample_status
+        data_type: string
+      - name: sample_type_id
+        data_type: string
+      - name: sstudy_id
+        data_type: string
+      - name: start_testing_at
+        data_type: timestamp
+      - name: storage_disposal_status
+        data_type: string
+      - name: storage_status
+        data_type: string
+      - name: specimen_type
+        data_type: string
+      - name: date_samples_received
+        data_type: timestamp
+      - name: purified_plasma_volume
+        data_type: float
+      - name: ship_date
+        data_type: timestamp
+      - name: shipper
+        data_type: string
+      - name: temperature
+        data_type: string
+      - name: tracking_number
+        data_type: string
+      - name: tube_label
+        data_type: string
+      - name: is_active
+        data_type: boolean
+      - name: allocated_for_address_id
+        data_type: string
+      - name: allocated_for_address_type
+        data_type: string
+      - name: allocated_for_department_id
+        data_type: string
+      - name: assigned_analyst_id
+        data_type: string
+      - name: assigned_department_id
+        data_type: string
+      - name: is_audit_deferred
+        data_type: boolean
+      - name: audit_sequence
+        data_type: integer
+      - name: is_auto_final_report
+        data_type: boolean
+      - name: is_auto_receive
+        data_type: boolean
+      - name: based_on_sample_id
+        data_type: string
+      - name: batch_id
+        data_type: string
+      - name: batch_stage_id
+        data_type: string
+      - name: container_type
+        data_type: string
+      - name: classification
+        data_type: string
+      - name: has_coc
+        data_type: boolean
+      - name: is_coc_required
+        data_type: boolean
+      - name: concentration
+        data_type: float
+      - name: concentration_units
+        data_type: string
+      - name: condition_label
+        data_type: string
+      - name: is_control_substance
+        data_type: boolean
+      - name: create_tool
+        data_type: string
+      - name: deviations
+        data_type: string
+      - name: disposal_target_at
+        data_type: timestamp
+      - name: due_date_offset
+        data_type: float
+      - name: due_date_offset_time_unit
+        data_type: string
+      - name: is_due_date_overridden
+        data_type: boolean
+      - name: event_at
+        data_type: timestamp
+      - name: event_number
+        data_type: float
+      - name: event_plan
+        data_type: string
+      - name: event_plan_item
+        data_type: string
+      - name: is_glp
+        data_type: boolean
+      - name: instrument_id
+        data_type: string
+      - name: invoice_do_not_invoice
+        data_type: boolean
+      - name: invoice_extra_factor
+        data_type: float
+      - name: invoice_base_at
+        data_type: timestamp
+      - name: has_invoice
+        data_type: boolean
+      - name: invoice_payer_address_id
+        data_type: string
+      - name: invoice_payer_address_type
+        data_type: string
+      - name: invoice_price_list_id
+        data_type: string
+      - name: invoice_reference
+        data_type: string
+      - name: location_id
+        data_type: string
+      - name: location_path
+        data_type: string
+      - name: modify_tool
+        data_type: string
+      - name: monitor_group_id
+        data_type: string
+      - name: notes
+        data_type: string
+      - name: number_labels
+        data_type: float
+      - name: physical_condition
+        data_type: string
+      - name: planned_start_at
+        data_type: timestamp
+      - name: processing_end_at
+        data_type: timestamp
+      - name: processing_start_at
+        data_type: timestamp
+      - name: process_instruction
+        data_type: string
+      - name: process_type
+        data_type: string
+      - name: product_id
+        data_type: string
+      - name: product_version_id
+        data_type: string
+      - name: project_id
+        data_type: string
+      - name: qc_sample_type
+        data_type: string
+      - name: reagent_lot_id
+        data_type: string
+      - name: received_by
+        data_type: string
+      - name: review_disposition
+        data_type: string
+      - name: reviewed_by
+        data_type: string
+      - name: reviewed_at
+        data_type: timestamp
+      - name: review_remarks
+        data_type: string
+      - name: is_review_required
+        data_type: boolean
+      - name: sample_description
+        data_type: string
+      - name: sample_point_id
+        data_type: string
+      - name: sample_point_instance
+        data_type: float
+      - name: sample_subtype_id
+        data_type: string
+      - name: schedule_rule_label
+        data_type: string
+      - name: is_schedule_template
+        data_type: boolean
+      - name: sdi_work_item_completion_status
+        data_type: string
+      - name: site_department_id
+        data_type: string
+      - name: source_sdi_work_item_id
+        data_type: string
+      - name: source_sp_id
+        data_type: string
+      - name: source_sp_level_id
+        data_type: string
+      - name: source_sp_source_label
+        data_type: string
+      - name: source_sp_version_id
+        data_type: string
+      - name: spc_template_id
+        data_type: string
+      - name: study_id
+        data_type: string
+      - name: submitted_at
+        data_type: timestamp
+      - name: submitter_id
+        data_type: string
+      - name: is_from_template
+        data_type: boolean
+      - name: testing_department_id
+        data_type: string
+      - name: trace_log_id
+        data_type: string
+      - name: treatments
+        data_type: string
+      - name: user_sequence
+        data_type: integer
+      - name: cls_review
+        data_type: string
+      - name: discharge_date
+        data_type: timestamp
+      - name: hs_at_time_of_collection
+        data_type: string
+      - name: input_dna
+        data_type: string
+      - name: ld_review
+        data_type: string
+      - name: receiving_inspection
+        data_type: string
+      - name: sample_state
+        data_type: string
+      - name: sap_operation_id
+        data_type: string
+      - name: sap_transfer_error
+        data_type: string
+      - name: sap_transfer_status
+        data_type: string
+      - name: wap_status
+        data_type: string
+      - name: work_area_department_id
+        data_type: string
+      - name: work_order_id
+        data_type: string
+      - name: elt_emitted_at
+        data_type: timestamp
+      - name: elt_hash_id
+        data_type: string

@@ -1,0 +1,11 @@
+models:
+  - name: lv__s_samplefamily_pii
+    description:
+      The lv__s_samplefamily_pii model is a collection of sample family information
+      captured in LabVantage.
+    columns:
+      - name: SAMPLES_COLLECTED_AT
+        description: The unique identifier for the subject. This is a VARCHAR field.
+        data_type: TIMESTAMP_TZ
+        meta:
+          masking_policy: mp_encrypt_pii_timestamp

@@ -1,0 +1,31 @@
+version: 2
+sources:
+  - name: clin_pipeline_snowpipe
+    database: "{{ target.database }}"
+    schema: clin_pipeline_snowpipe
+    tables:
+      - name: jobs_status
+        description: "External table of jobs status"
+        external:
+          location: "@{{ env_var('DBT_RAW_DB', 'RAW') }}.clin_pipeline_snowpipe.jobs_status" # reference an existing external stage
+          file_format: "( type = json )" # fully specified here, or reference an existing file format
+          auto_refresh: true # requires configuring an event notification from Amazon S3 or Azure
+
+        # all Snowflake external tables natively include a `metadata$filename` pseudocolumn
+        # and a `value` column (JSON blob-ified version of file contents), so there is no need to specify
+        # them here. you may optionally specify columns to unnest or parse from the file:
+        columns:
+          - name: event
+            data_type: text
+            description: "Event type"
+            expression: >
+              split_part(split_part(METADATA$FILENAME, 'jobs_status/', 2), '.', 1)
+          - name: modified_at
+            data_type: timestamp_tz
+            description: "Timestamp of when the file was last modified"
+            expression: to_timestamp(metadata$FILE_LAST_MODIFIED)
+          - name: hash_id
+            data_type: text
+            description: >
+              hash of the file contents
+            expression: metadata$FILE_CONTENT_KEY

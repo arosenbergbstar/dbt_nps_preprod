@@ -2,7 +2,7 @@ with
     clinpipe__jobs_status as (
         {{
             dbt_utils.deduplicate(
-                relation=source("clin_pipeline", "clinpipe__jobs_status"),
+                relation=ref("clinpipe__jobs_status"),
                 partition_by="job_id",
                 order_by="updated_at desc",
             )
@@ -11,7 +11,7 @@ with
     stg_clinpipe__jobs_events as (
         {{
             dbt_utils.deduplicate(
-                relation=source("clin_pipeline", "clinpipe__jobs_events"),
+                relation=ref("clinpipe__jobs_events"),
                 partition_by="job_id, event_status",
                 order_by="updated_at desc",
             )

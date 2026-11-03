@@ -1,0 +1,12 @@
+version: 2
+sources:
+  - name: clin_pipeline_snowpipe
+    database: "{{ env_var('DBT_RAW_DB', 'RAW') }}"
+    schema: clin_pipeline_snowpipe
+    tables:
+      - name: results
+        description: >
+          Pipeline results for the job coming from JSON files in Clin Environment.
+      - name: jobs_events
+        description: >
+          Job processing events coming from JSON files in Clin Pipeline. A new file is created for each event.

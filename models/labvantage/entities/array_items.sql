@@ -1,13 +1,39 @@
 with
-    arrays as (select * from {{ ref("stg_arrays") }} where array_id not ilike '%TEST%'),
-    arrayitems as (select * from {{ ref("stg_arrayitems") }}),
+    {# Transformation recreated from dbt_prod stg_arrays #}
+    arrays as (
+        select
+            arrayid::varchar as array_id,
+            arraydesc::varchar as array_desc,
+            arraylayoutid::varchar as array_layout_id,
+            createdt::timestamp_tz as create_at,
+            moddt::timestamp_tz as mod_at
+        from {{ ref("array") }}
+        where
+            array_id not like 'TEST%'
+            and array_id not like 'SDBB%'
+            and array_id not ilike '%TEST%'
+    ),
+    {# Transformation recreated from dbt_prod stg_arrayitems #}
+    arrayitems as (
+        select
+            arrayitemid::varchar as array_item_id,
+            arrayid::varchar as array_id,
+            createdt::timestamp as create_at,
+            moddt::timestamp as mod_at,
+            createby::varchar as create_by,
+            modby::varchar as mod_by,
+            itemlabel::varchar as array_location,
+            verticallabel::varchar as array_location_v,
+            horizontallabel::varchar as array_location_h
+        from {{ ref("arrayitem") }}
+    ),
     arrayitemcontents as (
         select
             contentkeyid1 as sample_id,
             arrayitemid as array_item_id,
             contenttype as content_type,
             contentitem as content_item
-        from {{ source("labvantage", "arrayitemcontent") }}
+        from {{ ref("arrayitemcontent") }}
         where contenttype = 'Sample'
         qualify
             row_number() over (partition by arrayitemid order by contentkeyid1 asc) = 1

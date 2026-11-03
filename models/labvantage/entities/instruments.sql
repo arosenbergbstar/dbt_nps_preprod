@@ -5,7 +5,7 @@ with
             instrumentid as instrument_id,
             instrumenttypeid as instrument_type_id,
             arraymethodid as array_method_id
-        from {{ source("labvantage", "arrayarraymethoditem") }}
+        from {{ ref("arrayarraymethoditem") }}
         where instrument_id is not null
     )
 

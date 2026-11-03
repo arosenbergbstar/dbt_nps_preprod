@@ -1,8 +1,32 @@
 with
-    request as (select * from {{ ref("stg_lv__s_requests") }}),
-    sample_ as (select * from {{ ref("stg_samples") }}),
-    worksheet as (select * from {{ ref("stg_worksheet") }}),
-    worksheetsdi as (select * from {{ ref("stg_worksheetsdi") }}),
+    {# Transformation recreated from dbt_prod stg_lv__s_requests #}
+    request as (
+        select request_id, trf_id, study_id
+        from {{ ref("lv__s_request_pii") }}
+        qualify row_number() over (partition by trf_id order by modified_at desc) = 1
+    ),
+    {# Transformation recreated from dbt_prod stg_samples #}
+    sample_ as (
+        select s_sampleid as sample_id, requestid as request_id
+        from {{ ref("s_sample") }}
+    ),
+    {# Transformation recreated from dbt_prod stg_worksheet #}
+    worksheet as (
+        select
+            worksheet_id,
+            {# Source column is misspelled ('nummber'); corrected here. #}
+            template_version_nummber as template_version_number,
+            worksheet_version_number,
+            template_id,
+            report_type,
+            created_at
+        from {{ ref("lv__worksheet") }}
+    ),
+    {# Transformation recreated from dbt_prod stg_worksheetsdi #}
+    worksheetsdi as (
+        select worksheet_id, sdc_id, key_id_1 as sample_id
+        from {{ ref("lv__worksheetsdi") }}
+    ),
 
     worksheet_data as (
         select

@@ -1,0 +1,241 @@
+models:
+  - name: lv__s_request_pii
+    description: The lv__s_request_pii model is a transformation of the
+      RAW.LABVANTAGE.s_request source table. It contains information about test
+      requests
+    columns:
+      - name: TRF_ID
+        description: The unique identifier for the Test Request Form (TRF).
+        data_type: VARCHAR
+      - name: SUBJECT_ID
+        description:
+          The unique labvantage internal identifier for the subject or
+          patient associated with the request.
+        data_type: VARCHAR
+      - name: REQUEST_ID
+        description: The unique labvantage internal identifier for the request.
+        data_type: VARCHAR
+      - name: WORK_ITEM_ID
+        description: The unique identifier for the work item associated with the request.
+        data_type: VARCHAR
+      - name: STUDY_ID
+        description: The unique identifier for the study associated with the request.
+        data_type: VARCHAR
+      - name: REQUEST_STATUS
+        description:
+          The status of the request. This is a VARCHAR field and can have
+          values like 'Pending', 'Accepted', 'Released', 'Cancelled', etc.
+        data_type: VARCHAR
+      - name: ACCESSIONED_AT
+        description: This column represents the timestamp when the request was
+          accessioned. The timestamp is in the 'America/Los_Angeles' timezone.
+        data_type: TIMESTAMP_TZ
+      - name: SAMPLES_RECEIVED_AT
+        description:
+          This column represents the timestamp when the samples related to
+          the request were received. The timestamp is in the
+          'America/Los_Angeles' timezone.
+        data_type: TIMESTAMP_TZ
+      - name: PHYSICIAN_SIGNATURE_DATE
+        description:
+          The date when the physician signed the request. It is stored as a
+          DATE data type.
+        data_type: TIMESTAMP_TZ
+        meta:
+          masking_policy: mp_encrypt_pii_timestamp
+      - name: HAS_PHYSICIAN_SIGNATURE
+        description:
+          A boolean field indicating whether the request has a physician's
+          signature. The value is extracted from the u_physsig field in
+          LabVantage if available which is a yes/no flag. If u_physsig is NULL
+          then the presence of physician_signature_date is used. NULL in both
+          fields is set to false.
+        data_type: BOOLEAN
+      - name: SHIPPER
+        description:
+          The Shipper field contains the name of the shipping company that is
+          responsible for transporting the samples. This could be any courier or
+          logistics company.
+        data_type: VARCHAR
+      - name: SHIPPER_TRACKING_NUMBER
+        description:
+          The Shipper Tracking Number is a unique identifier provided by the
+          shipping company. This number is used to track the shipment and
+          monitor its status.
+        data_type: VARCHAR
+      - name: ORDERING_PHYSICIAN_ID
+        description:
+          The unique identifier of the physician who ordered the request.
+          This is a text field.
+        data_type: VARCHAR
+      - name: ORDERING_PHYSICIAN_NAME
+        description:
+          The full name of the physician who ordered the request. This is a
+          text field.
+        data_type: VARCHAR
+        meta:
+          masking_policy: mp_encrypt_pii_string
+      - name: ORDERING_PHYSICIAN_TYPE
+        description:
+          The type or specialty of the physician who ordered the request.
+          This is a text field.
+        data_type: VARCHAR
+      - name: ADDITIONAL_REPORT_RECIPIENT
+        description:
+          This column represents the additional recipient of the report. It
+          is a VARCHAR type and can contain any string value representing the
+          recipient's name or ID.
+        data_type: VARCHAR
+        meta:
+          masking_policy: mp_encrypt_pii_string
+      - name: REVIEW_DISPOSITION
+        description:
+          This column represents the review disposition of the request. It is
+          a VARCHAR type and can contain any string value representing the
+          status or outcome of the review process.
+        data_type: VARCHAR
+      - name: WORK_ITEM_VERSION_ID
+        description:
+          This column represents the version ID of the work item associated
+          with the request. It is a VARCHAR type and can contain any string
+          value representing the unique identifier of the work item version.
+        data_type: VARCHAR
+      - name: PURPOSE
+        description:
+          The 'PURPOSE' column represents the purpose of the request. It is a
+          VARCHAR type and can contain any text.
+        data_type: VARCHAR
+      - name: NUM_SAMPLES_EXPECTED
+        description:
+          The 'NUM_SAMPLES_EXPECTED' column represents the number of samples
+          expected for the request. It is a NUMBER type and can contain any
+          integer.
+        data_type: NUMBER
+      - name: PRIORITY
+        description:
+          The 'PRIORITY' column represents the priority of the request. It is
+          a VARCHAR type and can contain any text.
+        data_type: VARCHAR
+      - name: NOTES
+        description:
+          This column contains any additional notes or comments related to
+          the request. It is a VARCHAR type and can contain any text.
+        data_type: VARCHAR
+      - name: USER_SEQUENCE
+        description:
+          This column represents the sequence number assigned to the user. It
+          is a NUMBER type and is used for tracking and ordering purposes.
+        data_type: NUMBER
+      - name: AUDIT_SEQUENCE
+        description:
+          This column represents the sequence number assigned for auditing
+          purposes. It is a NUMBER type and is used for tracking changes and
+          maintaining the order of operations.
+        data_type: NUMBER
+      - name: IS_FROM_TEMPLATE
+        description: ""
+        data_type: BOOLEAN
+      - name: IS_ACTIVE
+        description:
+          A boolean flag indicating the active status of the request. If
+          true, the request is active; if false, the request is not active.
+        data_type: BOOLEAN
+      - name: IS_AUTO_RELEASE
+        description: A boolean flag indicating whether the request is set to
+          auto-release. If true, the request will be automatically released; if
+          false, the request will not be automatically released.
+        data_type: BOOLEAN
+      - name: TRACE_LOG_ID
+        description: The TRACE_LOG_ID is a unique identifier for the trace log
+          associated with the request. This is a VARCHAR field and is used for
+          tracking and debugging purposes.
+        data_type: VARCHAR
+      - name: CREATION_RULE
+        description:
+          The CREATION_RULE is a VARCHAR field that specifies the rule used
+          to create the request. This could include information about the
+          process or criteria used for request creation.
+        data_type: VARCHAR
+      - name: REQUEST_CLASS
+        description:
+          The REQUEST_CLASS is a VARCHAR field that categorizes the type of
+          request. This could include classifications such as 'urgent',
+          'routine', etc. This field is used for sorting and filtering requests.
+        data_type: VARCHAR
+      - name: DUE_AT
+        description:
+          The 'DUE_AT' column represents the timestamp when the request is
+          due. The timestamp is in the 'America/Los_Angeles' timezone.
+        data_type: TIMESTAMP_TZ
+      - name: ACCEPTED_AT
+        description:
+          The 'ACCEPTED_AT' column represents the timestamp when the request
+          was accepted. The timestamp is in the 'America/Los_Angeles' timezone.
+        data_type: TIMESTAMP_TZ
+      - name: RELEASED_AT
+        description:
+          The 'RELEASED_AT' column represents the timestamp when the request
+          was released. The timestamp is in the 'America/Los_Angeles' timezone.
+        data_type: TIMESTAMP_TZ
+      - name: REQUESTED_AT
+        description: ""
+        data_type: TIMESTAMP_TZ
+      - name: COMPLETED_AT
+        description: ""
+        data_type: TIMESTAMP_TZ
+      - name: RECEIVED_AT
+        description: The date and time when the request was received. This is a
+          TIMESTAMP_TZ field, and the time is in the 'America/Los_Angeles'
+          timezone.
+        data_type: TIMESTAMP_TZ
+      - name: HOLD_BY
+        description: The identifier of the user who placed the request on hold.
+        data_type: VARCHAR
+      - name: HOLD_AT
+        description:
+          The timestamp when the request was placed on hold. This is in the
+          'America/Los_Angeles' timezone.
+        data_type: TIMESTAMP_TZ
+      - name: STARTED_AT
+        description: The timestamp when the request was started. This is in the
+          'America/Los_Angeles' timezone.
+        data_type: TIMESTAMP_TZ
+      - name: CANCELLED_BY
+        description: The ID of the user who cancelled the request.
+        data_type: VARCHAR
+      - name: CANCELLED_AT
+        description:
+          The timestamp when the request was cancelled. This is in the
+          'America/Los_Angeles' timezone and is of the type TIMESTAMPTZ.
+        data_type: TIMESTAMP_TZ
+      - name: MODIFIED_BY
+        description:
+          The ID of the user who last modified the request. This is of the
+          type TEXT.
+        data_type: VARCHAR
+      - name: MODIFIED_AT
+        description:
+          The timestamp when the record was last modified. The timestamp is
+          in the 'America/Los_Angeles' timezone.
+        data_type: TIMESTAMP_TZ
+      - name: CREATED_BY
+        description: The identifier of the user who created the record.
+        data_type: VARCHAR
+      - name: CREATED_AT
+        description:
+          The timestamp when the record was created. The timestamp is in the
+          'America/Los_Angeles' timezone.
+        data_type: TIMESTAMP_TZ
+      - name: ELT_EMITTED_AT
+        description:
+          This column represents the timestamp at which the data was emitted
+          from the source system. The timestamp is in the 'America/Los_Angeles'
+          timezone and is of the TIMESTAMPTZ data type.
+        data_type: TIMESTAMP_TZ
+      - name: ELT_HASH_ID
+        description:
+          This column represents a unique hash identifier generated for each
+          record in the source system. This identifier is used for tracking
+          changes in the data over time. The identifier is of the TEXT data
+          type.
+        data_type: VARCHAR

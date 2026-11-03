@@ -1,13 +1,13 @@
 with
     trackitem as (
         select *
-        from {{ source("labvantage", "trackitem") }}
+        from {{ ref("trackitem") }}
         where trackitem.linksdcid = 'LV_ReagentLot'
     ),
-    reagentlot as (select * from {{ source("labvantage", "reagentlot") }}),
-    arrayzonecontent as (select * from {{ source("labvantage", "arrayzonecontent") }}),
+    reagentlot as (select * from {{ ref("reagentlot") }}),
+    arrayzonecontent as (select * from {{ ref("arrayzonecontent") }}),
     arrayitemarrayzone as (
-        select * from {{ source("labvantage", "arrayitemarrayzone") }}
+        select * from {{ ref("arrayitemarrayzone") }}
     ),
     main as (
         select

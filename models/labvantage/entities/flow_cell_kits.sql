@@ -1,7 +1,7 @@
 with
     arrayarraymethoditems as (
         select *
-        from {{ source("labvantage", "arrayarraymethoditem") }}
+        from {{ ref("arrayarraymethoditem") }}
         where
             arraymethodid rlike 'Flow Cell S. Kit.*'
             {# 

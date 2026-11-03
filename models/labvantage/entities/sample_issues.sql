@@ -1,7 +1,30 @@
 {# Clarity needed on business logic for these events #}
 with
-    issues_all as (select * from {{ ref("stg_audit_lab_issues") }}),
-    issues_current as (select * from {{ ref("stg_lab_issues") }}),
+    {#
+        Transformations recreated from dbt_prod stg_audit_lab_issues (audit table)
+        and stg_lab_issues (current table).
+        U means pending, the note is required for on hold.
+    #}
+    issues_all as (
+        select
+            keyid1 as request_id,
+            approvalflag as approval_tag,
+            notes,
+            revieweddt as reviewed_at,
+            reviewedby as reviewed_by
+        from {{ ref("a_sdiapprovalstep") }}
+        where (lower(notes) like '%on hold%' and approvalflag = 'U') or approvalflag = 'F'
+    ),
+    issues_current as (
+        select
+            keyid1 as request_id,
+            approvalflag as approval_tag,
+            notes,
+            revieweddt as reviewed_at,
+            reviewedby as reviewed_by
+        from {{ ref("sdiapprovalstep") }}
+        where (lower(notes) like '%on hold%' and approvalflag = 'U') or approvalflag = 'F'
+    ),
     main as (
         select
             issues_all.request_id,

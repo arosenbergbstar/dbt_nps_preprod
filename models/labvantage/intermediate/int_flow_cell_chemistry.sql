@@ -4,7 +4,8 @@ with
         with the jobs table so that we do not have to calculate it
         within the model.
     #}
-    jobs as (select hmc_flow_cell_id, wgs_flow_cell_id from {{ ref("stg_lv__job") }}),
+    {# Recreated from dbt_prod stg_lv__job (only the flow cell columns are needed here) #}
+    jobs as (select hmc_flow_cell_id, wgs_flow_cell_id from {{ ref("lv__u_job") }}),
     flowcell_chemistry_modern as (
         select distinct hmc_flow_cell_id as flowcell_id, 'hmc' as flowcell_process_type
         from jobs
@@ -22,7 +23,7 @@ with
             transferexecutionid::varchar as transfer_execution_id,
             arraytransfermethodid::varchar as array_transfer_method_id,
             moddt::timestamp as mod_at
-        from {{ source("labvantage", "transferexecution") }}
+        from {{ ref("transferexecution") }}
         where arraytransfermethodid = 'Sequencing 96 Well'
     ),
     transfer_execution_details as (
@@ -32,7 +33,7 @@ with
             moddt::timestamp as mod_at,
             upper(sourcekeyid1::varchar) as source_array,
             upper(targetkeyid1::varchar) as target_array
-        from {{ source("labvantage", "transferexecutiondetail") }}
+        from {{ ref("transferexecutiondetail") }}
     -- where target_array like 'H%'
     ),
     flowcell_chemistry_legacy as (

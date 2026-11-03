@@ -1,0 +1,83 @@
+version: 2
+sources:
+  - name: labvantage
+    database: "{{ env_var('DBT_RAW_DB', 'RAW') }}"
+    schema: LABVANTAGE
+    tables:
+      - name: a_arrayarraymethoditem
+      - name: a_s_sample
+      - name: a_sdiapprovalstep
+      - name: a_sdidataapproval
+      - name: a_sdidataitem
+      - name: array
+      - name: arrayarraymethoditem
+      - name: arrayitem
+      - name: arrayitemarrayzone
+      - name: arrayitemcontent
+      - name: arraymethod
+      - name: arraytype
+      - name: arrayzonecontent
+      - name: instrument
+      - name: instrumentmodel
+      - name: instrumenttype
+      - name: reagentlot
+      - name: reagentlotrecipe
+      - name: reagenttype
+      - name: reportevent
+      - name: reporteventitem
+      - name: s_childsample
+      - name: s_request
+      - name: s_sample
+      - name: s_sampledetail
+      - name: s_samplefamily
+      - name: s_samplemap
+      - name: s_study
+      - name: s_studysite
+      - name: s_subject
+      - name: sdialias
+      - name: sdiapprovalstep
+      - name: sdidataapproval
+      - name: sdidataitem
+      - name: sdidataitemspec
+      - name: specparamlimits
+      - name: taskexecitem
+      - name: trackitem
+      - name: transferexecution
+      - name: transferexecutiondetail
+      - name: transferexecutionreagent
+      - name: u_bioclindeliverables
+        description: LabVantage BioClin deliverables table mapping studies to their BFX deliverable types
+      - name: u_job
+        description: LabVantage jobs table that aggregates fields related to pipeline jobs
+        columns:
+          - name: WGSFCREQUEUE
+            description: Requeue status of the WGS flow cell
+              For flow cells there are two conditions Y and P
+              Y - Indicates that the referenced object was requeued.
+              P - Indicates that the referenced object passed (was not requeued)
+          - name: FIVEHMCFCREQUEUE
+            description: Requeue status of the 5hmC flow cell
+              For flow cells there are two conditions Y and P
+              Y - Indicates that the referenced object was requeued.
+              P - Indicates that the referenced object passed (was not requeued)
+          - name: WGSSEQREQUEUE
+            description: Requeue status of the WGS sequenced sample
+              For sequenced samples there are three conditions N, Y, and P
+              N - Indicates that the referenced object has not yet been evaluated. Once an upstream object (in this case the flow cell) has been evaluated, this is set to N to indicate to the workflow that it is ready for evaluation.
+              Y - Indicates that the referenced object was requeued
+              P - Indicates that the referenced object passed (was not requeued)
+          - name: FIVEHMCSEQREQUEUE
+            description: Requeue status of the 5hmC sequenced sample
+              For sequenced samples there are three conditions N, Y, and P
+              N - Indicates that the referenced object has not yet been evaluated. Once an upstream object (in this case the flow cell) has been evaluated, this is set to N to indicate to the workflow that it is ready for evaluation.
+              Y - Indicates that the referenced object was requeued
+              P - Indicates that the referenced object passed (was not requeued)
+          - name: PURIFIEDPLASMAREQUEUE
+            description: Requeue status of the source purified plasma sample
+              For the purified plasma sample there are four conditions N, P, F, and R
+              N - Indicates that the referenced object has not yet been evaluated. Once an upstream object (in this case the flow cell) has been evaluated, this is set to N to indicate to the workflow that it is ready for evaluation.
+              P - Indicates that the referenced object passed (was not requeued)
+              F - Indicates that the referenced object failed review but was also not requeued. This indicates the need for a QNF report.
+              R - Indicates that the referenced object was requeued
+      - name: worksheet
+      - name: worksheetsdi

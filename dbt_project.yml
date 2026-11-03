@@ -24,6 +24,31 @@ flags:
 data_tests:
     +severity: warn # all tests
 
+# Migrated from dbt_base: row access policy (NODMED) and PII masking policies used by
+# the labvantage/staging and pipeline/staging models.
+on-run-start:
+    - "{{ create_nodmed_row_access() }}"
+    - "{{ dbt_snow_mask.create_masking_policy('models') }}"
+
+vars:
+    use_force_applying_masking_policy: "True"
+
+    # Pipeline categorization for QC metrics processing (migrated from dbt_base).
+    # v1 and v2 pipelines output results in different JSON formats. These vars
+    # ensure we explicitly handle each pipeline and fail loudly if a new one appears.
+    # Used in: stg_clinpipe__results_json_v1.sql, stg_clinpipe__results_json_v2.sql,
+    #          tests/pipeline/clin_pipeline/staging/stg_clinpipe__results_combined/all_pipelines_categorized.sql
+    clinpipe_v1_pipelines: ['ovarian', 'pancreatic']      # flat JSON: hmc_qc, wgs_qc at root
+    clinpipe_v2_pipelines: ['multicancer', 'pancv2', 'bioclin']      # nested JSON: outputs.qc_metrics
+
+    # Effective date for FIO1 (For Information Only) QC metric overrides (DO-275).
+    # Used in: stg_clinpipe__results_json_v2.sql
+    fio1_effective_date: '2025-08-21 00:00:00 -0700'
+
+    # Effective date for FIO2 (For Information Only) QC metric overrides (CFP-2).
+    # Used in: stg_clinpipe__results_json_v2.sql
+    fio2_effective_date: '2026-06-24 00:00:00 -0700'
+
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
 # These settings can be overridden in individual model files
@@ -49,6 +74,9 @@ models:
             staging:
                 +schema: labvantage_stage
                 +materialized: view
+                pii:
+                    +tags:
+                        - "pii"
             entities:
                 +schema: labvantage_entity
                 +materialized: table
@@ -60,6 +88,9 @@ models:
             +materialized: table
             +tags:
                 - "hourly"
+            staging:
+                +schema: pipeline_staging
+                +materialized: view
             int:
                 +schema: pipeline_int
                 +materialized: ephemeral

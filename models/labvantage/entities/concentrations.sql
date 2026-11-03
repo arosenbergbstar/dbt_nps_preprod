@@ -1,6 +1,6 @@
 with
     sdidataspecitem as (
-        select * from {{ source("labvantage", "lv__sdidataitemspec") }}
+        select * from {{ ref("lv__sdidataitemspec") }}
     ),
     main as (
         select

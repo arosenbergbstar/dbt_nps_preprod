@@ -1,9 +1,47 @@
 with
-    subject as (select * from {{ ref("stg_lv__s_subject_pii") }}),
+    {# Transformation recreated from dbt_prod stg_lv__s_subject_pii #}
+    subject as (
+        select
+            subject_id,
+            case
+                sex_at_birth
+                when 'M'
+                then 'Male'
+                when 'F'
+                then 'Female'
+                when 'U'
+                then 'Unknown'
+                else sex_at_birth
+            end as patient_sex_at_birth,
+            has_informed_consent,
+            diabetes_diagnosed_date,
+            age_at_blood_draw,
+            modified_at,
+            created_at,
+            ordering_physician_name as physician_full_name,
+            body_mass_index,
+            smoker,
+            iff(
+                ethnicity = 'White/Caucasian', 'White', ethnicity
+            ) as patient_ethnicity,
+            icd_10_code,
+            is_heavy_smoker,
+            has_family_history_of_pancreatic_cancer,
+            known_genetic_risk_factors,
+            has_risk_factors,
+            other_clinical_info,
+            notes
+        from {{ ref("lv__s_subject_pii") }}
+    ),
+    {# Transformation recreated from dbt_prod stg_lv__sdialias #}
     sdialias as (
-        select source_entity_id as subject_id, alias_id
-        from {{ ref("stg_lv__sdialias") }}
-        where alias_id_type = 'patient id'
+        select key_id_1 as subject_id, alias_id
+        from {{ ref("lv__sdialias") }}
+        where
+            lower(
+                iff(alias_type ilike 'tube label', 'purified plasma id', alias_type)
+            )
+            = 'patient id'
     ),
     patients as (
         select

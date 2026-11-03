@@ -1,5 +1,5 @@
 with
-    requests as (select * from {{ source("labvantage_pii", "lv__s_request_pii") }}),
+    requests as (select * from {{ ref("lv__s_request_pii") }}),
     sdiapprovalstep as (
         select
             keyid1 request_id,
@@ -7,7 +7,7 @@ with
             notes rejection_notes,
             revieweddt rejected_at,
             reviewedby reviewed_by
-        from {{ source("labvantage", "sdiapprovalstep") }}
+        from {{ ref("sdiapprovalstep") }}
         where
             sdcid = 'Request'
             and approvaltypeid = 'RequestAcceptance'

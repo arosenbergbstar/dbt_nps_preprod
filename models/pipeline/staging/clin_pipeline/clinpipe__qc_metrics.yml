@@ -1,0 +1,35 @@
+version: 2
+
+models:
+  - name: clinpipe__qc_metrics
+    description: >
+      QC metrics mart for clinical pipeline results.
+      hmc_zero_cpg_fraction is always a fraction (0-1), calculated in v1 pipelines
+      and read directly from JSON in v2 pipelines.
+      Schema matches production BASE.CLIN_PIPELINE.CLINPIPE__QC_METRICS.
+    columns:
+      - name: job_id
+        description: Unique identifier for the pipeline job
+        tests:
+          - not_null
+          - unique
+
+      - name: hmc_zero_cpg_fraction
+        description: >
+          Fraction of HMC fragments with zero CpG sites.
+          DO-459: For v1 pipelines, this is calculated as zero_cpg / unique_fragments.
+          For v2 pipelines, this is read directly from JSON.
+          Value should always be between 0 and 1 (inclusive).
+          NULL indicates a failed sample (unique_fragments = 0).
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 1
+              inclusive: true
+
+      - name: hmc_unique_fragments
+        description: Number of unique HMC fragments
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: true

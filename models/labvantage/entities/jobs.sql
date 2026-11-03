@@ -40,7 +40,7 @@ with
             modified_at,
             created_at,
             canceled_at
-        from {{ source("labvantage", "lv__u_job") }}
+        from {{ ref("lv__u_job") }}
     )
 
 select *

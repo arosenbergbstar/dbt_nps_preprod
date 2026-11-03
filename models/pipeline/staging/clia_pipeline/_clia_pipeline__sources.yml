@@ -1,0 +1,18 @@
+version: 2
+sources:
+  - name: dynamodb
+    database: "{{ env_var('DBT_RAW_DB', 'RAW') }}"
+    schema: DYNAMODB
+    tables:
+      - name: jobs
+      - name: results
+      - name: sequencing_run_metrics
+      - name: triage
+  - name: clin_pipeline
+    database: "{{ env_var('DBT_RAW_DB', 'RAW') }}"
+    schema: CLIN_PIPELINE
+    tables:
+      - name: jobs
+      - name: results
+      - name: sequencing_run_metrics
+      - name: triage

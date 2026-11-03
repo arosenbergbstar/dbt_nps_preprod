@@ -1,8 +1,29 @@
 {% set li892_effective_date = "2026-07-13 00:00:00 -0700" %}
 
 with
-    reporteventitem as (select * from {{ ref("stg_reporteventitem") }}),
-    reportevent as (select * from {{ ref("stg_reportevent") }}),
+    {# Transformation recreated from dbt_prod stg_reporteventitem #}
+    reporteventitem as (
+        select
+            report_event_id,
+            report_event_item_id,
+            item_key_id_1 as request_id,
+            created_at,
+            convert_timezone(
+                'US/Pacific', date_trunc('second', created_at)
+            ) as report_created_at
+        from {{ ref("lv__reporteventitem") }}
+    ),
+    {# Transformation recreated from dbt_prod stg_reportevent #}
+    reportevent as (
+        select
+            report_event_id,
+            report_id,
+            event_type,
+            disposition,
+            report_content,
+            created_at
+        from {{ ref("lv__reportevent") }}
+    ),
 
     report as (
         select

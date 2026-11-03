@@ -5,7 +5,7 @@ with
             detailvalue as discrepancy_reason,
             createdt as created_at,
             moddt as mod_at
-        from {{ source("labvantage", "s_sampledetail") }}
+        from {{ ref("s_sampledetail") }}
     ),
     main as (
         select

@@ -1,12 +1,8 @@
 {# v3 of the results json schema #}
-{{ config(post_hook=["{{ apply_nodmed_row_access( this ) }}"]) }}
 
 with
-    stg_study_samples as (
-        select distinct job_id, study_id from {{ ref("stg_study_samples") }}
-    ),
     versioned_src as (
-        select * from {{ ref("stg_clinpipe__legacy_versioned_results") }}
+        select * from {{ ref("int_clinpipe__legacy_versioned_results") }}
     ),
 
     transformed_src as (
@@ -55,11 +51,7 @@ with
             or (data:pipeline_name = 'ovarian' and major_pipeline_version >= 0)
     ),
 
-    final as (
-        select transformed_src.*, stg_study_samples.study_id
-        from transformed_src
-        join stg_study_samples on stg_study_samples.job_id = transformed_src.job_id
-    )
+    final as (select * from transformed_src)
 
 select *
 from final

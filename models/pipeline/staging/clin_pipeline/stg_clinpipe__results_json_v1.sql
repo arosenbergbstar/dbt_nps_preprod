@@ -9,7 +9,7 @@
 #}
 
 with
-    src as (select * from {{ ref("stg_clinpipe__versioned_results") }}),
+    src as (select * from {{ ref("int_clinpipe__versioned_results") }}),
 
     -- Explicit enumeration of v1 pipelines
     filtered_src as (

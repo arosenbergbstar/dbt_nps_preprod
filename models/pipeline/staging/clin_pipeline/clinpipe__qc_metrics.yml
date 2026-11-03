@@ -3,7 +3,7 @@ version: 2
 models:
   - name: clinpipe__qc_metrics
     description: >
-      QC metrics mart for clinical pipeline results.
+      QC metrics for clinical pipeline results (consolidated from the former stg_clinpipe__qc_metrics).
       hmc_zero_cpg_fraction is always a fraction (0-1), calculated in v1 pipelines
       and read directly from JSON in v2 pipelines.
       Schema matches production BASE.CLIN_PIPELINE.CLINPIPE__QC_METRICS.

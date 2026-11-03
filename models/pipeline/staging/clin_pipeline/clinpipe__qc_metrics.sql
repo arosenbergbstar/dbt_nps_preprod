@@ -1,15 +1,15 @@
-
 {#
-    DO-459: QC metrics mart - standardized output
+    DO-459: QC metrics - standardized output
 
-    All QC metrics are extracted and normalized upstream.
+    QC metrics are extracted as columns upstream in the v1/v2 staging models
+    (stg_clinpipe__results_json_v1/v2) and unioned in stg_clinpipe__results_combined.
     hmc_zero_cpg_fraction is always a fraction (calculated in v1, native in v2).
 
     Note: Schema matches production BASE.CLIN_PIPELINE.CLINPIPE__QC_METRICS
 #}
 
 with
-    qc_metrics as (select * from {{ ref("stg_clinpipe__qc_metrics") }}),
+    src as (select * from {{ ref("stg_clinpipe__results_combined") }}),
 
     final as (
         select
@@ -53,10 +53,9 @@ with
             wgs_zero_cpg_fraction,
             plasma_cfdna_fluorescence_conc_ng_ml,
 
-
             hash_id,
             emitted_at
-        from qc_metrics
+        from src
     )
 
 select *

@@ -1,11 +1,25 @@
--- {{ config(post_hook=["{{ apply_nodmed_row_access( this ) }}"]) }}
+{% set src = source("clin_pipeline", "jobs") %}
+{% set col_list = get_json_keys(src, "data") %}
 
 with
-    stg_clia_pipeline__jobs as (select * from {{ ref("stg_clia_pipeline__jobs") }}),
+    dedup_src as (
+        {{
+            dbt_utils.deduplicate(
+                relation=src,
+                partition_by="event",
+                order_by="emitted_at::timestamp_tz asc",
+            )
+        }}
+    ),
 
     final as (
-        select * exclude (hash_id)
-        from stg_clia_pipeline__jobs
+        select
+            dedup_src.event,
+            {% for col in col_list %}
+                {{ rename_clia_pipeline("data", col) }},
+            {% endfor %}
+            emitted_at::timestamp_tz as emitted_at
+        from dedup_src
     )
 
 select *

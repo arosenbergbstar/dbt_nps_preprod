@@ -21,7 +21,7 @@
 #}
 
 select distinct pipeline_name
-from {{ ref("stg_clinpipe__versioned_results") }}
+from {{ ref("int_clinpipe__versioned_results") }}
 where
     pipeline_name is not null
     and pipeline_name not in ('{{ var('clinpipe_v1_pipelines') | join("', '") }}')

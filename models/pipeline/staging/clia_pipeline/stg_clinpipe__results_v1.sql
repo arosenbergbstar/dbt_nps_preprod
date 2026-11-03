@@ -1,16 +1,11 @@
 {# v1 of the results json schema #}
-{{ config(post_hook=["{{ apply_nodmed_row_access( this ) }}"]) }}
 
 {% set src = source("clin_pipeline", "results") %}
 {% set col_list = get_json_keys(src, "data") %}
 
 with
-    stg_study_samples as (
-        select distinct sample_id, study_id from {{ ref("stg_study_samples") }}
-    ),
-
     versioned_src as (
-        select * from {{ ref("stg_clinpipe__legacy_versioned_results") }}
+        select * from {{ ref("int_clinpipe__legacy_versioned_results") }}
     ),
 
     transformed_src as (
@@ -44,11 +39,7 @@ with
         where pipeline_name is null and major_pipeline_version < 3
     ),
 
-    final as (
-        select transformed_src.*, stg_study_samples.study_id
-        from transformed_src
-        join stg_study_samples on stg_study_samples.sample_id = transformed_src.dna_id
-    )
+    final as (select * from transformed_src)
 
 select *
 from final

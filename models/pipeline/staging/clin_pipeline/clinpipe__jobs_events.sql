@@ -26,7 +26,20 @@ with
             elt_modified_at::timestamp_tz as elt_modified_at,
             elt_emitted_at::timestamp_tz as elt_emitted_at
         from renamed
+    ),
+    converted as (
+        select
+            event,
+            job_id,
+            launch_directory,
+            event_message,
+            event_status,
+            task_name,
+            {{ cast_timestamp_tz('updated_at', 'UTC') }},
+            elt_modified_at,
+            elt_emitted_at
+        from typed
     )
+
 select *
-from typed
-order by updated_at desc
+from converted

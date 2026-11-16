@@ -12,9 +12,6 @@
             - 1 PCDC sample cancelled shows up in new, not old (same one as IVD_MCD)
             - A bunch of DRY run test samples and a few other test samples in new not old - don't care about these. Some are labeled as commercial, should be changed to test
 #}
-
-
-
 with
     purified_plasma_samples_agg as (
         select * from {{ ref("purified_plasma_samples_by_purified_plasma_id") }}
@@ -72,8 +69,17 @@ with
             request_timestamps.initial_report_at,
             request_timestamps.corrected_report_at,
             request_timestamps.amended_report_at,
-            iff(requests.request_status = 'Denied', request_timestamps.rejected_at, null) as rejected_at,
-            coalesce(sample_timestamps.cancelled_at, iff(requests.request_status = 'Cancelled', request_timestamps.cancelled_at, null)) as cancelled_at,
+            iff(
+                requests.request_status = 'Denied', request_timestamps.rejected_at, null
+            ) as rejected_at,
+            coalesce(
+                sample_timestamps.cancelled_at,
+                iff(
+                    requests.request_status = 'Cancelled',
+                    request_timestamps.cancelled_at,
+                    null
+                )
+            ) as cancelled_at,
             is_cancelled_all_pp_aliquots,
             is_cancelled_all_wb_aliquots,
             tat.ctat_in_days,
@@ -116,7 +122,7 @@ with
         left join
             {{ ref("timestamps_by_trf_id__flat") }} as request_timestamps
             on requests.trf_id = request_timestamps.trf_id
-        left join 
+        left join
             {{ ref("turnaround_times_by_trf_id__flat") }} as tat
             on requests.request_id = tat.request_id
         left join
@@ -225,7 +231,12 @@ with
         left join
             {{ ref("timestamps_by_purified_plasma_id__flat") }} as sample_timestamps
             on requests.request_id = sample_timestamps.request_id
-        where requests.trf_id not in (select distinct trf_id from labvantage_data__purified_plasma)
+        where
+            not exists (
+                select 1
+                from labvantage_data__purified_plasma as plasma
+                where plasma.trf_id = requests.trf_id
+            )
     ),
 
     labvantage_data__jobs as (

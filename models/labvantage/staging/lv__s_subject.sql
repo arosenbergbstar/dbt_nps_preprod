@@ -1,4 +1,3 @@
-{{ config(post_hook="{{ dbt_snow_mask.apply_masking_policy('models') }}") }}
 {% set src = source("labvantage", "s_subject") %}
 with
     source as (select * from {{ src }}),
@@ -52,8 +51,10 @@ with
             {{ adapter.quote("ACTIVEFLAG") }} as is_active,
             {{ adapter.quote("TRACELOGID") }} as trace_log_id,
 
+            {{ adapter.quote("MODTOOL") }} as modified_tool,
             {{ adapter.quote("MODBY") }} as modified_by,
             {{ adapter.quote("MODDT") }} as modified_at,
+            {{ adapter.quote("CREATETOOL") }} as created_tool,
             {{ adapter.quote("CREATEBY") }} as created_by,
             {{ adapter.quote("CREATEDT") }} as created_at,
 
@@ -70,6 +71,7 @@ with
             diabetes_diagnosed_date::date as diabetes_diagnosed_date,
             age_at_blood_draw::number(38, 2) as age_at_blood_draw,
             client_id::text as client_id,
+            client_address_type::text as client_address_type,
             ordering_physician_name::text as ordering_physician_name,
             body_mass_index::number(38, 2) as body_mass_index,
             ipmn::boolean as ipmn,
@@ -99,6 +101,8 @@ with
             patient_birth_date::date as patient_birth_date,
             patient_death_date::date as patient_death_date,
             subject_type::text as subject_type,
+            species_id::text as species_id,
+            strain_id::text as strain_id,
 
             notes::text as notes,
             user_sequence::integer as user_sequence,
@@ -107,8 +111,10 @@ with
             is_active::boolean as is_active,
             trace_log_id::text as trace_log_id,
 
+            modified_tool::text as modified_tool,
             modified_by::text as modified_by,
             {{ cast_timestamp_tz("modified_at", "UTC") }},
+            created_tool::text as created_tool,
             created_by::text as created_by,
             {{ cast_timestamp_tz("created_at", "UTC") }},
 

@@ -1,11 +1,7 @@
 with
     instruments as (
-        select distinct
-            arrayid as array_id,
-            instrumentid as instrument_id,
-            instrumenttypeid as instrument_type_id,
-            arraymethodid as array_method_id
-        from {{ ref("arrayarraymethoditem") }}
+        select distinct array_id, instrument_id, instrument_type_id, array_method_id
+        from {{ ref("lv__arrayarraymethoditem") }}
         where instrument_id is not null
     )
 

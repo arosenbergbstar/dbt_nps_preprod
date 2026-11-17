@@ -1,18 +1,18 @@
 with
-    requests as (select * from {{ ref("lv__s_request_pii") }}),
+    requests as (select * from {{ ref("lv__s_request") }}),
     sdiapprovalstep as (
         select
-            keyid1 request_id,
-            approvalflag approval_tag,
+            key_id_1 request_id,
+            approval_flag approval_tag,
             notes rejection_notes,
-            revieweddt rejected_at,
-            reviewedby reviewed_by
-        from {{ ref("sdiapprovalstep") }}
+            reviewed_at rejected_at,
+            reviewed_by
+        from {{ ref("lv__sdiapprovalstep") }}
         where
-            sdcid = 'Request'
-            and approvaltypeid = 'RequestAcceptance'
+            sdc_id = 'Request'
+            and approval_type_id = 'RequestAcceptance'
             -- U means pending, the note is required for on hold
-            and approvalflag = 'F'
+            and approval_flag = 'F'
     ),
     main as (
         select

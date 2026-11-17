@@ -1,0 +1,81 @@
+{% set src = source("labvantage", "arraymethod") %}
+
+with
+    source as (select * from {{ src }}),
+    renamed as (
+        select
+            {{ adapter.quote("VERSIONAPPROVEDDT") }} as version_approved_at,
+            {{ adapter.quote("EXECUTECALCFLAG") }} as is_execute_calc,
+            {{ adapter.quote("NOTES") }} as notes,
+            {{ adapter.quote("CREATEDT") }} as created_at,
+            {{ adapter.quote("ARRAYMETHODID") }} as array_method_id,
+            {{ adapter.quote("ARRAYMETHODVERSIONID") }} as array_method_version_id,
+            {{ adapter.quote("CREATEBY") }} as created_by,
+            {{ adapter.quote("ARRAYLAYOUTID") }} as array_layout_id,
+            {{ adapter.quote("ARRAYTYPEVERSIONID") }} as array_type_version_id,
+            {{ adapter.quote("INSTRUMENTTYPEID") }} as instrument_type_id,
+            {{ adapter.quote("USERSEQUENCE") }} as user_sequence,
+            {{ adapter.quote("ARRAYMETHODDESC") }} as array_method_desc,
+            {{ adapter.quote("MODDT") }} as modified_at,
+            {{ adapter.quote("TRACELOGID") }} as trace_log_id,
+            {{ adapter.quote("AUDITSEQUENCE") }} as audit_sequence,
+            {{ adapter.quote("ARRAYLAYOUTVERSIONID") }} as array_layout_version_id,
+            {{ adapter.quote("ARRAYTYPEID") }} as array_type_id,
+            {{ adapter.quote("VERSIONEFFECTIVEDT") }} as version_effective_at,
+            {{ adapter.quote("MODBY") }} as modified_by,
+            {{ adapter.quote("ACTIVEFLAG") }} as is_active,
+            {{ adapter.quote("CREATECHILDSAMPLEFLAG") }} as is_create_child_sample,
+            {{ adapter.quote("SAMPLETYPEID") }} as sample_type_id,
+            {{ adapter.quote("PROMOTERESULTSFLAG") }} as is_promote_results,
+            {{ adapter.quote("MODTOOL") }} as modified_tool,
+            {{ adapter.quote("NGS_SERVICE") }} as ngs_service,
+            {{ adapter.quote("ARRAYANALYSISFLAG") }} as array_analysis_flag,
+            {{ adapter.quote("VERSIONSTATUS") }} as version_status,
+            {{ adapter.quote("NGS_DEFERREDSAMPLETYPE") }} as ngs_deferred_sample_type,
+            {{ adapter.quote("TEMPLATEFLAG") }} as is_template,
+            {{ adapter.quote("CREATETOOL") }} as created_tool,
+            {{ adapter.quote("ARRAYLOADINGFLAG") }} as array_loading_flag,
+            {{ airbyte_get_emit_col(src) }} as elt_emitted_at,
+            {{ airbyte_get_id_col(src) }} as elt_hash_id
+        from source
+    ),
+    typed as (
+        select
+            {{ cast_timestamp_tz("version_approved_at", "UTC") }},
+            iff(is_execute_calc = 'Y', true, false) as is_execute_calc,
+            notes::text as notes,
+            {{ cast_timestamp_tz("created_at", "UTC") }},
+            array_method_id::text as array_method_id,
+            array_method_version_id::text as array_method_version_id,
+            created_by::text as created_by,
+            array_layout_id::text as array_layout_id,
+            array_type_version_id::text as array_type_version_id,
+            instrument_type_id::text as instrument_type_id,
+            user_sequence::integer as user_sequence,
+            array_method_desc::text as array_method_desc,
+            {{ cast_timestamp_tz("modified_at", "UTC") }},
+            trace_log_id::text as trace_log_id,
+            audit_sequence::integer as audit_sequence,
+            array_layout_version_id::text as array_layout_version_id,
+            array_type_id::text as array_type_id,
+            {{ cast_timestamp_tz("version_effective_at", "UTC") }},
+            modified_by::text as modified_by,
+            iff(is_active = 'Y', true, false) as is_active,
+            iff(is_create_child_sample = 'Y', true, false) as is_create_child_sample,
+            sample_type_id::text as sample_type_id,
+            iff(is_promote_results = 'Y', true, false) as is_promote_results,
+            modified_tool::text as modified_tool,
+            ngs_service::text as ngs_service,
+            array_analysis_flag::text as array_analysis_flag,
+            version_status::text as version_status,
+            ngs_deferred_sample_type::text as ngs_deferred_sample_type,
+            iff(is_template = 'Y', true, false) as is_template,
+            created_tool::text as created_tool,
+            array_loading_flag::text as array_loading_flag,
+            elt_emitted_at::timestamp_tz as elt_emitted_at,
+            elt_hash_id::text as elt_hash_id
+        from renamed
+    )
+
+select *
+from typed

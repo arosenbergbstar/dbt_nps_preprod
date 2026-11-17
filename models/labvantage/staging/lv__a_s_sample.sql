@@ -1,6 +1,4 @@
-{{ config(post_hook="{{ dbt_snow_mask.apply_masking_policy('models') }}") }}
-{% set src = source("labvantage", "s_sample") %}
-{% set column_names = dbt_utils.get_filtered_columns_in_relation(from=src) %}
+{% set src = source("labvantage", "a_s_sample") %}
 
 with
     source as (select * from {{ src }}),
@@ -17,6 +15,7 @@ with
             {{ adapter.quote("ASSIGNEDDEPARTMENTID") }} as assigned_department_id,
             {{ adapter.quote("AUDITDEFERFLAG") }} as is_audit_deferred,
             {{ adapter.quote("AUDITSEQUENCE") }} as audit_sequence,
+            {{ adapter.quote("AUDITOPFLAG") }} as audit_op_flag,
             {{ adapter.quote("AUTOFINALRPTFLAG") }} as is_auto_final_report,
             {{ adapter.quote("AUTORECEIVEFLAG") }} as is_auto_receive,
             {{ adapter.quote("BASEDONSAMPLEID") }} as based_on_sample_id,
@@ -205,6 +204,7 @@ with
             assigned_department_id::text as assigned_department_id,
             iff(is_audit_deferred = 'Y', true, false) as is_audit_deferred,
             audit_sequence::integer as audit_sequence,
+            audit_op_flag::text as audit_op_flag,
             iff(is_auto_final_report = 'Y', true, false) as is_auto_final_report,
             iff(is_auto_receive = 'Y', true, false) as is_auto_receive,
             based_on_sample_id::text as based_on_sample_id,
@@ -240,6 +240,7 @@ with
             invoice_reference::text as invoice_reference,
             location_id::text as location_id,
             location_path::text as location_path,
+            material_id::text as material_id,
             modify_tool::text as modify_tool,
             monitor_group_id::text as monitor_group_id,
             notes::text as notes,

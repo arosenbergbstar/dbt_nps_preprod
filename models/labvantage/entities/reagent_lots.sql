@@ -1,32 +1,32 @@
 with
     trackitem as (
-        select *
-        from {{ ref("trackitem") }}
-        where trackitem.linksdcid = 'LV_ReagentLot'
+        select * from {{ ref("lv__trackitem") }} where link_sdc_id = 'LV_ReagentLot'
     ),
-    reagentlot as (select * from {{ ref("reagentlot") }}),
-    arrayzonecontent as (select * from {{ ref("arrayzonecontent") }}),
-    arrayitemarrayzone as (
-        select * from {{ ref("arrayitemarrayzone") }}
-    ),
+    reagentlot as (select * from {{ ref("lv__reagentlot") }}),
+    arrayzonecontent as (select * from {{ ref("lv__arrayzonecontent") }}),
+    arrayitemarrayzone as (select * from {{ ref("lv__arrayitemarrayzone") }}),
     main as (
         select
-            arrayitemarrayzone.arrayitemid as array_item_id,
-            reagentlot.containertypeid as container_type_id,
-            reagentlot.reagenttypeid as reagent_type_id,
-            reagentlot.reagentclass as reagent_class,
-            reagentlot.manufacturerlot as manufacturer_lot
+            arrayitemarrayzone.array_item_id,
+            reagentlot.container_type_id,
+            reagentlot.reagent_type_id,
+            reagentlot.reagent_class,
+            reagentlot.manufacturer_lot_id as manufacturer_lot
         from trackitem
-        inner join reagentlot on trackitem.linkkeyid1 = reagentlot.reagentlotid
+        inner join reagentlot on trackitem.link_key_id_1 = reagentlot.reagent_lot_id
         left join
-            arrayzonecontent on arrayzonecontent.contentkeyid1 = trackitem.trackitemid
+            arrayzonecontent
+            on arrayzonecontent.content_key_id_1 = trackitem.track_item_id
         left join
             arrayitemarrayzone
-            on arrayitemarrayzone.arrayzoneid = arrayzonecontent.arrayzoneid
+            on arrayitemarrayzone.array_zone_id = arrayzonecontent.array_zone_id
         qualify
             row_number() over (
-                partition by array_item_id, reagent_type_id, manufacturer_lot
-                order by arrayzonecontent.arrayzoneid asc
+                partition by
+                    arrayitemarrayzone.array_item_id,
+                    reagentlot.reagent_type_id,
+                    reagentlot.manufacturer_lot_id
+                order by arrayzonecontent.array_zone_id asc
             )
             = 1
     )

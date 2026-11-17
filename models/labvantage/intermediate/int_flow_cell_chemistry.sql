@@ -19,21 +19,18 @@ with
         events.
     #}
     transfer_executions as (
-        select
-            transferexecutionid::varchar as transfer_execution_id,
-            arraytransfermethodid::varchar as array_transfer_method_id,
-            moddt::timestamp as mod_at
-        from {{ ref("transferexecution") }}
-        where arraytransfermethodid = 'Sequencing 96 Well'
+        select transfer_execution_id, array_transfer_method_id, modified_at as mod_at
+        from {{ ref("lv__transferexecution") }}
+        where array_transfer_method_id = 'Sequencing 96 Well'
     ),
     transfer_execution_details as (
         select
-            transferexecutionid::varchar as transfer_execution_id,
-            transferexecutiondetailid::varchar as transfer_execution_detail_id,
-            moddt::timestamp as mod_at,
-            upper(sourcekeyid1::varchar) as source_array,
-            upper(targetkeyid1::varchar) as target_array
-        from {{ ref("transferexecutiondetail") }}
+            transfer_execution_id,
+            transfer_execution_detail_id,
+            modified_at as mod_at,
+            upper(source_key_id_1) as source_array,
+            upper(target_key_id_1) as target_array
+        from {{ ref("lv__transferexecutiondetail") }}
     -- where target_array like 'H%'
     ),
     flowcell_chemistry_legacy as (

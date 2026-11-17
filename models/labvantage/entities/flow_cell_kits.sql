@@ -1,25 +1,25 @@
 with
     arrayarraymethoditems as (
         select *
-        from {{ ref("arrayarraymethoditem") }}
+        from {{ ref("lv__arrayarraymethoditem") }}
         where
-            arraymethodid rlike 'Flow Cell S. Kit.*'
+            array_method_id rlike 'Flow Cell S. Kit.*'
             {# 
                 Exclude FCs that are explicitly tests 
                 or placeholder. This could be more explicit by 
                 selecting IDs like 'H%', but the flowcell ID format
                 could change in the future.
             #}
-            and arrayid not like '%TEST%'
-            and arrayid not like 'Pla%'
+            and array_id not like '%TEST%'
+            and array_id not like 'Pla%'
     ),
 
     main as (
         select distinct
-            arrayid as flow_cell_id,
-            arraymethodid as flow_cell_kit_description,
+            array_id as flow_cell_id,
+            array_method_id as flow_cell_kit_description,
             regexp_substr(
-                arraymethodid, 'Flow Cell (S.) Kit', 1, 1, 'e'
+                array_method_id, 'Flow Cell (S.) Kit', 1, 1, 'e'
             ) as flow_cell_kit_id
         from arrayarraymethoditems
     )

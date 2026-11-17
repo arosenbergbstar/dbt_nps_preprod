@@ -1,11 +1,11 @@
 with
     sampledetail as (
         select
-            s_sampleid as sample_id,
-            detailvalue as discrepancy_reason,
-            createdt as created_at,
-            moddt as mod_at
-        from {{ ref("s_sampledetail") }}
+            sample_id,
+            detail_value as discrepancy_reason,
+            created_at,
+            modified_at as mod_at
+        from {{ ref("lv__s_sampledetail") }}
     ),
     main as (
         select

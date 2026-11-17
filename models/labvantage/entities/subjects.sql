@@ -1,5 +1,5 @@
 with
-    subject as (select * from {{ ref("lv__s_subject_pii") }}),
+    subject as (select * from {{ ref("lv__s_subject") }}),
     sdialias as (
         select key_id_1 as subject_id, alias_id
         from {{ ref("lv__sdialias") }}

@@ -1,39 +1,38 @@
 with
     samples as (
         select
-            s_sampleid as sample_id,
-            requestid as request_id,
-            samplefamilyid as sample_family_id,
-            u_tubelabel as purified_plasma_id,
-            sstudyid as study_id,
-            sampletypeid as sample_type_id,
-            preptypeid as prep_type_id,
-            specimentype as specimen_type,
-            samplestatus as sample_status,
-            u_purifiedplasmavol as purified_plasma_volume,
-            u_shipper as shipper,
-            u_temperature as temperature,
-            u_trackingnumber as tracking_number,
-            u_shipdate as shipped_at,
-            receiveddt as received_at,
-            confirmeddt as confirmed_at,
-            disposaldt as disposal_at,
-            cancelleddt as cancelled_at,
-            createdt as create_at,
-            moddt as mod_at
-        from {{ ref("s_sample") }}
+            sample_id,
+            request_id,
+            sample_family_id,
+            tube_label as purified_plasma_id,
+            sstudy_id as study_id,
+            sample_type_id,
+            prep_type_id,
+            specimen_type,
+            sample_status,
+            purified_plasma_volume,
+            shipper,
+            temperature,
+            tracking_number,
+            ship_date as shipped_at,
+            received_at,
+            confirmed_at,
+            disposed_at as disposal_at,
+            cancelled_at,
+            created_at as create_at,
+            modified_at as mod_at
+        from {{ ref("lv__s_sample") }}
     ),
     samplefamilies as (
         select
-            s_samplefamilyid as sample_family_id,
-            collectiondt as collection_at,
-            studysiteid as study_site_id,
-            sampletypeid as sample_type_id
-        from {{ ref("s_samplefamily") }}
+            sample_family_id,
+            samples_collected_at as collection_at,
+            study_site_id,
+            sample_type_id
+        from {{ ref("lv__s_samplefamily") }}
     ),
     studysite as (
-        select study_site_id, study_site_description
-        from {{ ref("lv__s_studysite") }}
+        select study_site_id, study_site_description from {{ ref("lv__s_studysite") }}
     ),
     main as (
         select

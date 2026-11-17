@@ -20,15 +20,12 @@ with
         from {{ ref("lv__arrayitem") }}
     ),
     arrayitemcontents as (
-        select
-            contentkeyid1 as sample_id,
-            arrayitemid as array_item_id,
-            contenttype as content_type,
-            contentitem as content_item
-        from {{ ref("arrayitemcontent") }}
-        where contenttype = 'Sample'
+        select content_key_id_1 as sample_id, array_item_id, content_type, content_item
+        from {{ ref("lv__arrayitemcontent") }}
+        where content_type = 'Sample'
         qualify
-            row_number() over (partition by arrayitemid order by contentkeyid1 asc) = 1
+            row_number() over (partition by array_item_id order by content_key_id_1 asc)
+            = 1
     ),
     flowcell_chemistry as (select * from {{ ref("int_flow_cell_chemistry") }}),
     operations as (

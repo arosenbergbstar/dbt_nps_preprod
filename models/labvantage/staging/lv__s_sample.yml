@@ -1,6 +1,6 @@
 version: 2
 models:
-  - name: lv__s_sample_pii
+  - name: lv__s_sample
     columns:
       - name: sample_id
         data_type: string
